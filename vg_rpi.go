@@ -10,9 +10,49 @@ import "C"
 import "unsafe"
 
 type VG struct {
-	Width   uint32
-	Height  uint32
+	Width  uint32
+	Height uint32
+
 	display uintptr
+}
+
+type EGLerror C.EGLint
+
+func (e EGLerror) Error() string {
+	switch e {
+	case C.EGL_SUCCESS:
+		return "No error"
+	case C.EGL_NOT_INITIALIZED:
+		return "EGL not initialized or failed to initialize"
+	case C.EGL_BAD_ACCESS:
+		return "Resource inaccessible"
+	case C.EGL_BAD_ALLOC:
+		return "Cannot allocate resources"
+	case C.EGL_BAD_ATTRIBUTE:
+		return "Unrecognized attribute or attribute value"
+	case C.EGL_BAD_CONTEXT:
+		return "Invalid EGL context"
+	case C.EGL_BAD_CONFIG:
+		return "Invalid EGL frame buffer configuration"
+	case C.EGL_BAD_CURRENT_SURFACE:
+		return "Current surface is no longer valid"
+	case C.EGL_BAD_DISPLAY:
+		return "Invalid EGL display"
+	case C.EGL_BAD_SURFACE:
+		return "Invalid surface"
+	case C.EGL_BAD_MATCH:
+		return "Inconsistent arguments"
+	case C.EGL_BAD_PARAMETER:
+		return "Invalid argument"
+	case C.EGL_BAD_NATIVE_PIXMAP:
+		return "Invalid native pixmap"
+	case C.EGL_BAD_NATIVE_WINDOW:
+		return "Invalid native window"
+	case C.EGL_CONTEXT_LOST:
+		return "Context lost"
+	default:
+		return "Unknown error"
+	}
 }
 
 func Create(width, height uint32) (*VG, error) {
@@ -20,8 +60,9 @@ func Create(width, height uint32) (*VG, error) {
 	if retval := C.create(
 		(*C.uint32_t)(unsafe.Pointer(&vg.Width)),
 		(*C.uint32_t)(unsafe.Pointer(&vg.Height)),
-		(*C.EGLDisplay)(unsafe.Pointer(&vg.display))); retval != 0 {
-		return nil, nil
+		(*C.EGLDisplay)(unsafe.Pointer(&vg.display)),
+	); retval != C.EGL_SUCCESS {
+		return nil, EGLerror(retval)
 	}
 
 	return vg, nil
