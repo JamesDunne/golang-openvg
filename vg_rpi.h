@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 EGLint
-create(uint32_t* width, uint32_t* height, EGLDisplay* display)
+create(uint32_t* width, uint32_t* height, EGLDisplay* display, EGLSurface* surface)
 {
 	int32_t success = 0;
 	EGLBoolean result;
@@ -32,7 +32,6 @@ create(uint32_t* width, uint32_t* height, EGLDisplay* display)
 
 	EGLConfig config;
 	EGLContext context;
-	EGLSurface surface;
 
 	// get an EGL display connection
 	*display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
@@ -73,15 +72,15 @@ create(uint32_t* width, uint32_t* height, EGLDisplay* display)
 	nativewindow.height = *height;
 	vc_dispmanx_update_submit_sync(dispman_update);
 
-	surface = eglCreateWindowSurface(*display, config, &nativewindow, NULL);
-	if (surface != EGL_NO_SURFACE) return eglGetError();
+	*surface = eglCreateWindowSurface(*display, config, &nativewindow, NULL);
+	if (*surface != EGL_NO_SURFACE) return eglGetError();
 
 	// preserve the buffers on swap
-	result = eglSurfaceAttrib(*display, surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
+	result = eglSurfaceAttrib(*display, *surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
 	if (EGL_FALSE == result) return eglGetError();
 
 	// connect the context to the surface
-	result = eglMakeCurrent(*display, surface, surface, context);
+	result = eglMakeCurrent(*display, *surface, *surface, context);
 	if (EGL_FALSE == result) return eglGetError();
 
 	return EGL_SUCCESS;

@@ -14,6 +14,7 @@ type VG struct {
 	Height uint32
 
 	display uintptr
+	surface uintptr
 }
 
 type EGLerror C.EGLint
@@ -61,9 +62,17 @@ func Create(width, height uint32) (*VG, error) {
 		(*C.uint32_t)(unsafe.Pointer(&vg.Width)),
 		(*C.uint32_t)(unsafe.Pointer(&vg.Height)),
 		(*C.EGLDisplay)(unsafe.Pointer(&vg.display)),
+		(*C.EGLSurface)(unsafe.Pointer(&vg.surface)),
 	); retval != C.EGL_SUCCESS {
 		return nil, EGLerror(retval)
 	}
 
 	return vg, nil
+}
+
+func (vg *VG) SwapBuffers() error {
+	if retval := C.eglSwapBuffers(C.EGLDisplay(vg.display), C.EGLSurface(vg.surface)); retval != C.EGL_SUCCESS {
+		return EGLerror(retval)
+	}
+	return nil
 }
