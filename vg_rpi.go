@@ -7,6 +7,7 @@ package vg
 //#include "vg_rpi.h"
 import "C"
 
+import "fmt"
 import "unsafe"
 
 type VG struct {
@@ -52,12 +53,13 @@ func (e EGLerror) Error() string {
 	case C.EGL_CONTEXT_LOST:
 		return "Context lost"
 	default:
-		return "Unknown error"
+		return fmt.Sprintf("Unknown error 0x%04x", uint32(e))
 	}
 }
 
 func Create(width, height uint32) (*VG, error) {
 	vg := &VG{Width: width, Height: height}
+
 	if retval := C.create(
 		(*C.uint32_t)(unsafe.Pointer(&vg.Width)),
 		(*C.uint32_t)(unsafe.Pointer(&vg.Height)),

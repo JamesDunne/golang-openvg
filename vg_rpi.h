@@ -33,6 +33,8 @@ create(uint32_t* width, uint32_t* height, EGLDisplay* display, EGLSurface* surfa
 	EGLConfig config;
 	EGLContext context;
 
+	bcm_host_init();
+
 	// get an EGL display connection
 	*display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	if (*display == EGL_NO_DISPLAY) return eglGetError();
@@ -54,8 +56,8 @@ create(uint32_t* width, uint32_t* height, EGLDisplay* display, EGLSurface* surfa
 	if (EGL_NO_CONTEXT == context) return eglGetError();
 
 	// create an EGL window surface
-	success = graphics_get_display_size(0 /* LCD */ , width, height);
-	if (success < 0) return -5;
+	success = graphics_get_display_size(0 /* LCD */, width, height);
+	if (success < 0) return -1;
 
 	vc_dispmanx_rect_set(&dst_rect, 0, 0, *width, *height);
 	vc_dispmanx_rect_set(&src_rect, 0 << 16, 0 << 16, *width << 16, *height << 16);
@@ -73,7 +75,7 @@ create(uint32_t* width, uint32_t* height, EGLDisplay* display, EGLSurface* surfa
 	vc_dispmanx_update_submit_sync(dispman_update);
 
 	*surface = eglCreateWindowSurface(*display, config, &nativewindow, NULL);
-	if (*surface != EGL_NO_SURFACE) return eglGetError();
+	if (EGL_NO_SURFACE == *surface) return eglGetError();
 
 	// preserve the buffers on swap
 	result = eglSurfaceAttrib(*display, *surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
