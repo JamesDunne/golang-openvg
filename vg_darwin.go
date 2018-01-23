@@ -75,5 +75,5 @@ keyUp(const unsigned short k)
 import "C"
 
 func Run(width, height int) {
-	C.vgMain(width, height)
+	C.vgMain(C.int(width), C.int(height))
 }
