@@ -1,12 +1,12 @@
-//+build darwin
+//+build windows
 
-package vg
+package main
 
 /*
-#cgo CFLAGS: -x objective-c -Iinclude
-#cgo LDFLAGS: -framework Cocoa -framework OpenGL -framework QuartzCore -Llib/macosx/ub/gle/standalone -lAmanithVG
+#cgo CFLAGS: -Iinclude
+#cgo LDFLAGS: -mwindows -s -Llib/win/x86_64/gle/standalone -lAmanithVG -lopengl32
 
-#include "macosx/main.m"
+#include "win/main.c"
 
 void
 appInit(const VGint surfaceWidth, const VGint surfaceHeight)

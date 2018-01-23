@@ -21,7 +21,7 @@
     #include <GL/gl.h>
     #include "wglext.h"
 #endif
-#include "tutorial_09.h"
+#include "app.h"
 #include "resource.h"
 #if defined(_MSC_VER)
     // take care of Visual Studio .Net 2005+ C deprecations
@@ -36,7 +36,7 @@
     #endif
 #endif
 #define CLASS_NAME "AmanithVG"
-#define WINDOW_TITLE "AmanithVG Tutorial 09 - Press F1 for help"
+#define WINDOW_TITLE "AmanithVG - Press F1 for help"
 
 // default window dimensions
 #define INITIAL_WINDOW_WIDTH 512
@@ -95,7 +95,7 @@ static VGboolean openvgInit(const VGuint width,
 }
 
 static void openvgDestroy(void) {
-    
+
     // unbind context and surface
     vgPrivMakeCurrentMZT(NULL, NULL);
     // destroy OpenVG surface
@@ -112,7 +112,7 @@ static VGint openvgSurfaceWidthGet(void) {
 
 // get the height of OpenVG drawing surface, in pixels
 static VGint openvgSurfaceHeightGet(void) {
-    
+
     return vgPrivGetSurfaceHeightMZT(vgWindowSurface);
 }
 
@@ -178,7 +178,7 @@ LRESULT CALLBACK windowMessagesHandler(HWND hWnd,
             // resize AmanithVG surface
             vgPrivSurfaceResizeMZT(vgWindowSurface, LOWORD(lParam), HIWORD(lParam));
             // inform tutorial that surface has been resized
-            tutorialResize(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+            appResize(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
             return 0;
 
         case WM_LBUTTONDOWN:
@@ -190,7 +190,7 @@ LRESULT CALLBACK windowMessagesHandler(HWND hWnd,
             // we apply a flip on y direction in order to be consistent with the OpenVG coordinates system
             mouseRightButtonDown(LOWORD(lParam), openvgSurfaceHeightGet() - HIWORD(lParam));
             return 0;
-        
+
         case WM_LBUTTONUP:
             // we apply a flip on y direction in order to be consistent with the OpenVG coordinates system
             mouseLeftButtonUp(LOWORD(lParam), openvgSurfaceHeightGet() - HIWORD(lParam));
@@ -252,7 +252,7 @@ static HWND windowCreateImpl(const char* title,
     wc.lpszMenuName = NULL;
     wc.lpszClassName = CLASS_NAME;
     RegisterClass(&wc);
-        
+
     // calculate window size
     rect.left = 0;
     rect.top = 0;
@@ -414,7 +414,7 @@ static VGboolean windowCreate(const char* title,
         0,                                      // Shift Bit Ignored
         0,                                      // No Accumulation Buffer
         0, 0, 0, 0,                             // Accumulation Bits Ignored
-        16,                                     // 16Bit Z-Buffer (Depth Buffer)  
+        16,                                     // 16Bit Z-Buffer (Depth Buffer)
         8,                                      // 8 bits Stencil Buffer
         0,                                      // No Auxiliary Buffer
         PFD_MAIN_PLANE,                         // Main Drawing Layer
@@ -430,9 +430,9 @@ static VGboolean windowCreate(const char* title,
         }
     }
     else {
-        pixelFormat = multisampleFormat;    
+        pixelFormat = multisampleFormat;
     }
-        
+
     if (!SetPixelFormat(deviceContext, pixelFormat, &pfd)) {
         windowDestroy();
         MessageBox(NULL, "Can't set the pixel format.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
@@ -451,7 +451,7 @@ static VGboolean windowCreate(const char* title,
         MessageBox(NULL, "Can't activate the GL rendering context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
         return VG_FALSE;
     }
-    
+
     if (!multisampleSupported) {
         if (windowMultisampleInit()) {
             windowDestroy();
@@ -468,7 +468,7 @@ static VGboolean windowCreate(const char* title,
             wglSwapIntervalEXT(0);
         }
     }
-    
+
     return VG_TRUE;
 }
 #else
@@ -658,7 +658,7 @@ static VGboolean processKeysPressure(void) {
         helpDialog();
     }
     else
-    // F2           
+    // F2
     if (keysPressed[VK_F2]) {
         keysPressed[VK_F2] = VG_FALSE;
         aboutDialog();
@@ -667,32 +667,24 @@ static VGboolean processKeysPressure(void) {
     return closeApp;
 }
 
-int WINAPI WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPSTR lpCmdLine,
-                   int nCmdShow) {
+int vgMain(int width, int height) {
 
     MSG msg;
     VGboolean done = VG_FALSE;
 
-    (void)hInstance;
-    (void)hPrevInstance;
-    (void)lpCmdLine;
-    (void)nCmdShow;
-
     // create window
-    if (!windowCreate(WINDOW_TITLE, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)) {
+    if (!windowCreate(WINDOW_TITLE, width, height)) {
         return 0;
     }
 
     // init OpenVG
-    if (!openvgInit(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)) {
+    if (!openvgInit(width, height)) {
         windowDestroy();
         return 0;
     }
 
     // init application
-    tutorialInit(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+    appInit(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
 
     // show window
     ShowWindow(nativeWindow, SW_NORMAL);
@@ -722,7 +714,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 // update window title (show FPS)
                 windowTitleUpdate();
                 // draw the scene
-                tutorialDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+                appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
                 // advance the frames counter
                 framesCounter++;
                 // present the scene on screen
@@ -732,7 +724,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     }
 
     // destroy OpenVG resources created by the tutorial
-    tutorialDestroy();
+    appDestroy();
     // destroy OpenVG context and surface
     openvgDestroy();
     windowDestroy();

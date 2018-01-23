@@ -1,4 +1,4 @@
-package vg
+package main
 
 import "testing"
 
