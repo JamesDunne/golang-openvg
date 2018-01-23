@@ -4,7 +4,7 @@ package vg
 
 //#cgo CFLAGS: -I/opt/vc/include
 //#cgo LDFLAGS: -L/opt/vc/lib -lbcm_host -lGLESv2 -lEGL
-//#include "vg_rpi.h"
+//#include "rpi/main.c"
 import "C"
 
 import "fmt"
