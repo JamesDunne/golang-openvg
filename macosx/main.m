@@ -22,8 +22,6 @@
 #include "app.h"
 
 // default window dimensions
-#define INITIAL_WINDOW_WIDTH 800
-#define INITIAL_WINDOW_HEIGHT 480
 #define WINDOW_TITLE "AmanithVG"
 
 // The 10.12 SDK adds new symbols and immediately deprecates the old ones
