@@ -24,7 +24,7 @@
 // default window dimensions
 #define INITIAL_WINDOW_WIDTH 800
 #define INITIAL_WINDOW_HEIGHT 480
-#define WINDOW_TITLE "OpenVG application - Press F1 for help"
+#define WINDOW_TITLE "AmanithVG"
 
 // The 10.12 SDK adds new symbols and immediately deprecates the old ones
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 101200
@@ -54,7 +54,7 @@ VGboolean done;
     // OpenGL texture used to blit the AmanithVG SRE surface
     GLuint blitTexture;
 #endif
-    // a Core Video display link 
+    // a Core Video display link
     CVDisplayLinkRef displayLink;
     // fps counter
     VGuint time0, time1;
@@ -81,8 +81,6 @@ VGboolean done;
                        Windowing system
 *****************************************************************/
 - (void) messageDialog :(const char*)title :(const char*)message;
-- (void) aboutDialog;
-- (void) helpDialog;
 - (VGuint) getTimeMS;
 - (void) windowTitleUpdate;
 // Core Video display link
@@ -232,7 +230,7 @@ VGboolean done;
     VGint surfaceWidth = [self openvgSurfaceWidthGet];
     VGint surfaceHeight = [self openvgSurfaceHeightGet];
     void* surfacePixels = (void*)vgPrivGetSurfacePixelsMZT(vgWindowSurface);
-    
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // simply put a quad, covering the whole window
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, blitTexture);
@@ -268,48 +266,6 @@ VGboolean done;
     // display the modal dialog
     [alert runModal];
     [alert release];
-}
-
-- (void) aboutDialog {
-
-    char msg[2048];
-    char yearStr[64];
-    time_t t = time(NULL);
-    struct tm *ltm = localtime(&t);
-
-    strcpy(msg, "AmanithVG - www.mazatech.com\n");
-    strcat(msg, "Copyright 2004-");
-    strftime(yearStr, sizeof(yearStr), "%Y", ltm);
-    strcat(msg, yearStr);
-    strcat(msg, " by Mazatech Srl. All Rights Reserved.\n\n");
-    strcat(msg, "OpenVG driver information:\n\n");
-    // vendor
-    strcat(msg, "Vendor: ");
-    strcat(msg, (const char *)vgGetString(VG_VENDOR));
-    strcat(msg, "\n");
-    // renderer
-    strcat(msg, "Renderer: ");
-    strcat(msg, (const char *)vgGetString(VG_RENDERER));
-    strcat(msg, "\n");
-    // version
-    strcat(msg, "Version: ");
-    strcat(msg, (const char *)vgGetString(VG_VERSION));
-    strcat(msg, "\n");
-    // extensions
-    strcat(msg, "Extensions: ");
-    strcat(msg, (const char *)vgGetString(VG_EXTENSIONS));
-    strcat(msg, "\n\n");
-    [self messageDialog :"About AmanithVG" :msg];
-}
-
-- (void) helpDialog {
-
-    char msg[1024];
-
-    strcpy(msg, "F2: About AmanithVG.\n");
-    strcat(msg, "F1: Help.\n");
-    strcat(msg, "Mouse: Move text control points.\n");
-    [self messageDialog :"Command keys" :msg];
 }
 
 // utility functions
@@ -368,7 +324,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     (void)outputTime;
     (void)flagsIn;
     (void)flagsOut;
-    
+
     CVReturn result = [(__bridge TutorialView*)displayLinkContext getFrameForTime:outputTime];
     return result;
 }
@@ -417,7 +373,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     // the reshape function may have changed the thread to which our OpenGL
     // context is attached before prepareOpenGL and initGL are called.  So call
-    // makeCurrentContext to ensure that our OpenGL context current to this 
+    // makeCurrentContext to ensure that our OpenGL context current to this
     // thread (i.e. makeCurrentContext directs all OpenGL calls on this thread
     // to [self openGLContext])
     [[self openGLContext] makeCurrentContext];
@@ -448,15 +404,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     // create a display link capable of being used with all active displays
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-    
+
     // set the renderer output callback function
     CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, (__bridge void*)self);
-    
+
     // set the display link for the current renderer
     CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
-    
+
     // activate the display link
     CVDisplayLinkStart(displayLink);
 
@@ -470,7 +426,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     (void)dirtyRect;
 
     if ([self lockFocusIfCanDraw]) {
-    
+
         [[self openGLContext] makeCurrentContext];
 
         // we draw on a secondary thread through the display link when resizing the view, -reshape is called automatically on the main thread
@@ -514,7 +470,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
         // get new dimensions
         NSSize bound = [self frame].size;
-        
+
         // resize AmanithVG drawing surface
         vgPrivSurfaceResizeMZT(vgWindowSurface, (VGint)bound.width, (VGint)bound.height);
         VGint surfaceWidth = [self openvgSurfaceWidthGet];
@@ -619,39 +575,44 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 }
 
 - (void) keyDown:(NSEvent *)theEvent {
+	keyDown([theEvent keyCode]);
 
-    char *chars = (char *)[[theEvent characters] cStringUsingEncoding: NSMacOSRomanStringEncoding];
+//    char *chars = (char *)[[theEvent characters] cStringUsingEncoding: NSMacOSRomanStringEncoding];
+//
+//    if (chars) {
+//        switch (chars[0]) {
+//            // ESC
+//            case 27:
+//                done = VG_TRUE;
+//                break;
+//            default:
+//                [super keyDown:theEvent];
+//                break;
+//        }
+//    }
+//    else {
+//        switch ([theEvent keyCode]) {
+//            // F1
+//            case 122:
+//                [self helpDialog];
+//                break;
+//            // F2
+//            case 120:
+//                [self aboutDialog];
+//                break;
+//            default:
+//                [super keyDown:theEvent];
+//                break;
+//        }
+//    }
+}
 
-    if (chars) {
-        switch (chars[0]) {
-            // ESC
-            case 27:
-                done = VG_TRUE;
-                break;
-            default:
-                [super keyDown:theEvent];
-                break;
-        }
-    }
-    else {
-        switch ([theEvent keyCode]) {
-            // F1
-            case 122:
-                [self helpDialog];
-                break;
-            // F2
-            case 120:
-                [self aboutDialog];
-                break;
-            default:
-                [super keyDown:theEvent];
-                break;
-        }
-    }
+- (void) keyUp:(NSEvent *)theEvent {
+	keyUp([theEvent keyCode]);
 }
 
 - (BOOL) acceptsFirstResponder {
-    
+
     // as first responder, the receiver is the first object in the responder chain to be sent key events and action messages
     return YES;
 }
@@ -710,7 +671,7 @@ void mainMenuPopulate(TutorialView* view) {
     NSMenu* subMenu;
     // create main menu = menu bar
     NSMenu* mainMenu = [[NSMenu alloc] initWithTitle:@"MainMenu"];
-    
+
     // the titles of the menu items are for identification purposes only and shouldn't be localized; the strings in the menu bar come
     // from the submenu titles, except for the application menu, whose title is ignored at runtime
     menuItem = [mainMenu addItemWithTitle:@"Apple" action:NULL keyEquivalent:@""];

@@ -21,29 +21,20 @@
 #include <VG/vgu.h>
 #include <VG/vgext.h>
 
-void appInit(const VGint surfaceWidth,
-                  const VGint surfaceHeight);
+void appInit(const VGint surfaceWidth, const VGint surfaceHeight);
 void appDestroy(void);
-void appResize(const VGint surfaceWidth,
-                    const VGint surfaceHeight);
-void appDraw(const VGint surfaceWidth,
-                  const VGint surfaceHeight);
+void appResize(const VGint surfaceWidth, const VGint surfaceHeight);
+void appDraw(const VGint surfaceWidth, const VGint surfaceHeight);
 
 // handle mouse events
-void mouseLeftButtonDown(const VGint x,
-                         const VGint y);
-void mouseLeftButtonUp(const VGint x,
-                       const VGint y);
-void mouseRightButtonDown(const VGint x,
-                          const VGint y);
-void mouseRightButtonUp(const VGint x,
-                        const VGint y);
-void mouseMove(const VGint x,
-               const VGint y);
-// handle touch events
-void touchDoubleTap(const VGint x,
-                    const VGint y);
-void touchPinch(const VGfloat deltaScl);
-void touchRotate(const VGfloat deltaRot);
+void mouseLeftButtonDown(const VGint x, const VGint y);
+void mouseLeftButtonUp(const VGint x, const VGint y);
+void mouseRightButtonDown(const VGint x, const VGint y);
+void mouseRightButtonUp(const VGint x, const VGint y);
+void mouseMove(const VGint x, const VGint y);
+
+// handle keyboard events
+void keyDown(const unsigned short k);
+void keyUp(const unsigned short k);
 
 #endif

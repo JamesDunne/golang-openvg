@@ -61,34 +61,19 @@ mouseMove(const VGint x, const VGint y)
 {
 }
 
-
-// handle touch events
 void
-touchDoubleTap(const VGint x, const VGint y)
+keyDown(const unsigned short k)
 {
 }
 
 void
-touchPinch(const VGfloat deltaScl)
-{
-}
-
-void
-touchRotate(const VGfloat deltaRot)
+keyUp(const unsigned short k)
 {
 }
 
 */
 import "C"
 
-type VG struct {
-	Width  uint32
-	Height uint32
-
-	display uintptr
-	surface uintptr
-}
-
-func main() {
-	C.vgMain(800, 480)
+func Run(width, height int) {
+	C.vgMain(width, height)
 }

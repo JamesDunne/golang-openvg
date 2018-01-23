@@ -36,11 +36,7 @@
     #endif
 #endif
 #define CLASS_NAME "AmanithVG"
-#define WINDOW_TITLE "AmanithVG - Press F1 for help"
-
-// default window dimensions
-#define INITIAL_WINDOW_WIDTH 512
-#define INITIAL_WINDOW_HEIGHT 512
+#define WINDOW_TITLE "AmanithVG"
 
 // Windows variables
 HDC deviceContext = NULL;
@@ -57,7 +53,7 @@ HINSTANCE applicationInstance;
     BITMAPINFO* vgSurfaceBitmapInfo;
 #endif
 // pressed keys buffer
-VGboolean keysPressed[256] = { VG_FALSE };
+//VGboolean keysPressed[256] = { VG_FALSE };
 // OpenVG variables
 void* vgContext = NULL;
 void* vgWindowSurface = NULL;
@@ -159,11 +155,13 @@ LRESULT CALLBACK windowMessagesHandler(HWND hWnd,
             return 0;
 
         case WM_KEYDOWN:
-            keysPressed[wParam] = VG_TRUE;
+			keyDown(wParam);
+            //keysPressed[wParam] = VG_TRUE;
             return 0;
 
         case WM_KEYUP:
-            keysPressed[wParam] = VG_FALSE;
+			keyUp(wParam);
+            //keysPressed[wParam] = VG_FALSE;
             return 0;
 
         case WM_GETMINMAXINFO:
@@ -597,75 +595,18 @@ static void windowBuffersSwap(void) {
     vgPostSwapBuffersMZT();
 }
 
-static void aboutDialog(void) {
-
-    char msg[2048];
-    char yearStr[64];
-    time_t t = time(NULL);
-    struct tm *ltm = localtime(&t);
-
-    strcpy(msg, "AmanithVG - www.mazatech.com\n");
-    strcat(msg, "Copyright 2004-");
-    strftime(yearStr, sizeof(yearStr), "%Y", ltm);
-    strcat(msg, yearStr);
-    strcat(msg, " by Mazatech Srl. All Rights Reserved.\n\n");
-
-    strcat(msg, "OpenVG driver information:\n\n");
-    // vendor
-    strcat(msg, "Vendor: ");
-    strcat(msg, (const char *)vgGetString(VG_VENDOR));
-    strcat(msg, "\n");
-    // renderer
-    strcat(msg, "Renderer: ");
-    strcat(msg, (const char *)vgGetString(VG_RENDERER));
-    strcat(msg, "\n");
-    // version
-    strcat(msg, "Version: ");
-    strcat(msg, (const char *)vgGetString(VG_VERSION));
-    strcat(msg, "\n");
-    // extensions
-    strcat(msg, "Extensions: ");
-    strcat(msg, (const char *)vgGetString(VG_EXTENSIONS));
-    strcat(msg, "\n\n");
-    messageDialog("About AmanithVG", msg);
-}
-
-static void helpDialog(void) {
-
-    char msg[1024];
-
-    strcpy(msg, "F2: About AmanithVG.\n");
-    strcat(msg, "F1: Help.\n");
-    strcat(msg, "Mouse: Move text control points.\n");
-    //strcat(msg, "I: Change color interpolation.\n");
-    //strcat(msg, "S: Change spread mode.\n");
-    messageDialog("Command keys", msg);
-}
-
-static VGboolean processKeysPressure(void) {
-
-    VGboolean closeApp = VG_FALSE;
-
-    // ESC
-    if (keysPressed[VK_ESCAPE]) {
-        keysPressed[VK_ESCAPE] = VG_FALSE;
-        closeApp = VG_TRUE;
-    }
-    else
-    // F1
-    if (keysPressed[VK_F1]) {
-        keysPressed[VK_F1] = VG_FALSE;
-        helpDialog();
-    }
-    else
-    // F2
-    if (keysPressed[VK_F2]) {
-        keysPressed[VK_F2] = VG_FALSE;
-        aboutDialog();
-    }
-
-    return closeApp;
-}
+//static VGboolean processKeysPressure(void) {
+//
+//    VGboolean closeApp = VG_FALSE;
+//
+//    // ESC
+//    if (keysPressed[VK_ESCAPE]) {
+//        keysPressed[VK_ESCAPE] = VG_FALSE;
+//        closeApp = VG_TRUE;
+//    }
+//
+//    return closeApp;
+//}
 
 int vgMain(int width, int height) {
 
@@ -697,29 +638,22 @@ int vgMain(int width, int height) {
 
     // enter main loop
     while (!done) {
-
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT) {
                 done = VG_TRUE;
-            }
-            else {
+            } else {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-        }
-        else {
-            // handle key pressure
-            done = processKeysPressure();
-            if (!done) {
-                // update window title (show FPS)
-                windowTitleUpdate();
-                // draw the scene
-                appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
-                // advance the frames counter
-                framesCounter++;
-                // present the scene on screen
-                windowBuffersSwap();
-            }
+        } else {
+            // update window title (show FPS)
+            windowTitleUpdate();
+            // draw the scene
+            appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+            // advance the frames counter
+            framesCounter++;
+            // present the scene on screen
+            windowBuffersSwap();
         }
     }
 

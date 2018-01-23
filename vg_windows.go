@@ -1,6 +1,6 @@
 //+build windows
 
-package main
+package vg
 
 /*
 #cgo CFLAGS: -Iinclude
@@ -61,20 +61,13 @@ mouseMove(const VGint x, const VGint y)
 {
 }
 
-
-// handle touch events
 void
-touchDoubleTap(const VGint x, const VGint y)
+keyDown(const unsigned short k)
 {
 }
 
 void
-touchPinch(const VGfloat deltaScl)
-{
-}
-
-void
-touchRotate(const VGfloat deltaRot)
+keyUp(const unsigned short k)
 {
 }
 
@@ -89,6 +82,6 @@ type VG struct {
 	surface uintptr
 }
 
-func main() {
-	C.vgMain(800, 480)
+func Run(width, height int) {
+	C.vgMain(C.int(width), C.int(height))
 }
