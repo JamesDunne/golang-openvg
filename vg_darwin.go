@@ -48,27 +48,32 @@ mouseLeftButtonUp(const VGint x, const VGint y)
 void
 mouseRightButtonDown(const VGint x, const VGint y)
 {
+
 }
 
 void
 mouseRightButtonUp(const VGint x, const VGint y)
 {
+
 }
 
 
 void
 mouseMove(const VGint x, const VGint y)
 {
+
 }
 
 void
 keyDown(const unsigned short k)
 {
+
 }
 
 void
 keyUp(const unsigned short k)
 {
+
 }
 
 */
