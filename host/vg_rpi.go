@@ -1,6 +1,6 @@
 //+build rpi
 
-package vg
+package host
 
 //#cgo CFLAGS: -I/opt/vc/include
 //#cgo LDFLAGS: -L/opt/vc/lib -lbcm_host -lGLESv2 -lEGL

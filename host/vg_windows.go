@@ -1,6 +1,6 @@
 //+build windows
 
-package vg
+package host
 
 /*
 #cgo CFLAGS: -Iinclude

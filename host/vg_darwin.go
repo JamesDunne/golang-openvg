@@ -1,6 +1,6 @@
 //+build darwin
 
-package vg
+package host
 
 /*
 #cgo CFLAGS: -x objective-c -Iinclude
