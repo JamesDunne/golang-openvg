@@ -21,7 +21,7 @@ func main() {
 	// Initialize the host to display OpenVG graphics at 800x480 resolution:
 	host.Init(800, 480)
 	// Supply Go function callback for rendering:
-	host.UseDrawFunc(draw)
+	host.DrawFunc = draw
 
 	// Event polling with idle loop:
 	for host.PollEvent() {
