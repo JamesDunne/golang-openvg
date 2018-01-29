@@ -18,7 +18,9 @@ func initVG(width, height int32) {
 	tileColor := &[]float32{0.0, 1.0, 0.0, 1.0}[0]
 
 	// set some default parameters for the OpenVG context
-	vg.Seti(vg.FillRule, int32(vg.EvenOdd))
+	//vg.Seti(vg.FillRule, int32(vg.EvenOdd))
+	vg.Seti(vg.FillRule, int32(vg.NonZero))
+
 	vg.Setfv(vg.ClearColor, 4, clearColor)
 	vg.Setfv(vg.TileFillColor, 4, tileColor)
 	vg.Setf(vg.StrokeLineWidth, 0.125)

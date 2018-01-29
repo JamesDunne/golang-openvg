@@ -31,8 +31,15 @@ func NewSansFont() *Font {
 		glyphs:          make([]uint32, count),
 	}
 
-	copy(f.characterMap, C.DejaVuSans_characterMap[:])
-	copy(f.glyphAdvances, C.DejaVuSans_glyphAdvances[:])
+	n := 0
+	n = copy(f.characterMap, C.DejaVuSans_characterMap[:])
+	if n != 500 {
+		panic("n != 500")
+	}
+	n = copy(f.glyphAdvances, C.DejaVuSans_glyphAdvances[:])
+	if n != count {
+		panic("n != count")
+	}
 
 	for i := 0; i < count; i++ {
 		p := unsafe.Pointer(&C.DejaVuSans_glyphPoints[C.DejaVuSans_glyphPointIndices[i]*2])
@@ -82,8 +89,12 @@ func Text(s string, f *Font) {
 		vg.MultMatrix(&mat[0])
 		_ = mat
 
-		//vg.DrawPath(f.glyphs[glyph], uint32(vg.FillPath))
+		//		vg.DrawPath(f.glyphs[glyph], uint32(vg.FillPath))
 		vg.DrawPath(f.glyphs[glyph], uint32(vg.StrokePath))
+		if vg.GetError() != vg.NoError {
+			panic("error!")
+		}
+
 		xx += size * float32(f.glyphAdvances[glyph]) / 65536.0
 	}
 
