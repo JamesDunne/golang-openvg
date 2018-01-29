@@ -726,8 +726,9 @@ void hostInit(int width, int height, void* appOut, void* viewOut) {
 
 }
 
-VGboolean hostPollEvent(void* ptr) {
-	NSApplication* app = (NSApplication*)ptr;
+VGboolean hostPollEvent(void* appPtr, void* viewPtr) {
+	NSApplication* app = (NSApplication*)appPtr;
+	TutorialView* view = (TutorialView*)viewPtr;
 
     // dispatch events
     NSEvent* event = [app nextEventMatchingMask: NSEventMaskAny untilDate: [NSDate dateWithTimeIntervalSinceNow: 0.0] inMode: NSDefaultRunLoopMode dequeue: true];
@@ -735,10 +736,10 @@ VGboolean hostPollEvent(void* ptr) {
         [app sendEvent: event];
         [app updateWindows];
     }
-    //else {
-    //    // modify UI (in this case window title, in order to show FPS) within the main thread
-    //    [view windowTitleUpdate];
-    //}
+    else {
+        // modify UI (in this case window title, in order to show FPS) within the main thread
+        [view windowTitleUpdate];
+    }
 
 	return done;
 }

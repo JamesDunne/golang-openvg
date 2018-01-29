@@ -35,5 +35,5 @@ func NewHost(width, height int) *Host {
 }
 
 func (h *Host) PollEvent() bool {
-	return int32(C.hostPollEvent(unsafe.Pointer(h.app))) == 0
+	return int32(C.hostPollEvent(unsafe.Pointer(h.app), unsafe.Pointer(h.view))) == 0
 }
