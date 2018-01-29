@@ -695,6 +695,7 @@ void hostInit(int width, int height, void* appOut, void* viewOut) {
         // get application
         NSApplication* app = [NSApplication sharedApplication];
         [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
+		[NSApp activateIgnoringOtherApps:YES];
 
         // create the window
         NSWindow* window = [[NSWindow alloc] initWithContentRect:frame styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer: TRUE];
@@ -713,7 +714,7 @@ void hostInit(int width, int height, void* appOut, void* viewOut) {
 
         // center the window
         [window center];
-        [window makeKeyAndOrderFront: nil];
+        [window makeKeyAndOrderFront: app];
 
         // create and populate the menu
         applicationMenuCreate(view);

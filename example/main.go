@@ -10,9 +10,8 @@ import (
 
 // Rendering is done on a specific OS thread managed by host:
 func draw(width, height int32) {
-	vg.Setfv(vg.ClearColor, 4, &[]float32{0.0, 1.0, 0.0, 1.0}[0])
+	vg.Setfv(vg.ClearColor, 4, &[]float32{0.0, 0.0, 1.0, 1.0}[0])
 	vg.Clear(0, 0, width, height)
-
 }
 
 func main() {
