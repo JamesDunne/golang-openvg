@@ -53,50 +53,30 @@ func NewSansFont() *Font {
 }
 
 func Text(s string, f *Font) {
-	//	float32 size = (VGfloat) pointsize, xx = x, mm[9];
 	size := float32(20.0)
 	x := float32(0)
 	y := float32(0)
 	xx := x
 	var mm [9]float32
 
-	//	vg.GetMatrix(mm);
 	vg.GetMatrix(&mm[0])
 
-	//	int character;
-	//	unsigned char *ss = (unsigned char *)s;
-	//	while ((ss = next_utf8_char(ss, &character)) != NULL) {
 	for _, character := range s {
-		//		int glyph = f.CharacterMap[character];
-		//		if (glyph == -1) {
-		//			continue;			   //glyph is undefined
-		//		}
 		glyph := f.characterMap[character]
 		if glyph == -1 {
 			continue
 		}
 
-		//		VGfloat mat[9] = {
-		//			size, 0.0f, 0.0f,
-		//			0.0f, size, 0.0f,
-		//			xx, y, 1.0f
-		//		};
 		mat := [9]float32{
 			size, 0, 0,
 			0, size, 0,
 			xx, y, 1,
 		}
-		//		vgLoadMatrix(mm);
-		//		vgMultMatrix(mat);
 		vg.LoadMatrix(&mm[0])
 		vg.MultMatrix(&mat[0])
-		//		vgDrawPath(f.Glyphs[glyph], VG_FILL_PATH);
 		vg.DrawPath(f.glyphs[glyph], uint32(vg.FillPath))
-		//		xx += size * f.GlyphAdvances[glyph] / 65536.0f;
 		xx += size * float32(f.glyphAdvances[glyph]) / 65536.0
-		//	}
 	}
 
-	//	vgLoadMatrix(mm);
 	vg.LoadMatrix(&mm[0])
 }
