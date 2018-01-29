@@ -859,7 +859,7 @@ func AppendPathData(
 	dstPath uint32,
 	numSegments int32,
 	pathSegments *uint8,
-	pathData *byte,
+	pathData unsafe.Pointer,
 ) {
 	C.vgAppendPathData(
 		(C.VGPath)(dstPath),
@@ -873,7 +873,7 @@ func ModifyPathCoords(
 	dstPath uint32,
 	startIndex int32,
 	numSegments int32,
-	pathData *byte,
+	pathData unsafe.Pointer,
 ) {
 	C.vgModifyPathCoords(
 		(C.VGPath)(dstPath),
@@ -1089,7 +1089,7 @@ func ClearImage(
 
 func ImageSubData(
 	image uint32,
-	data *byte,
+	data unsafe.Pointer,
 	dataStride int32,
 	dataFormat ImageFormatEnum,
 	x int32,
@@ -1111,7 +1111,7 @@ func ImageSubData(
 
 func GetImageSubData(
 	image uint32,
-	data *byte,
+	data unsafe.Pointer,
 	dataStride int32,
 	dataFormat ImageFormatEnum,
 	x int32,
@@ -1210,7 +1210,7 @@ func SetPixels(
 }
 
 func WritePixels(
-	data *byte,
+	data unsafe.Pointer,
 	dataStride int32,
 	dataFormat ImageFormatEnum,
 	dx int32,
@@ -1250,7 +1250,7 @@ func GetPixels(
 }
 
 func ReadPixels(
-	data *byte,
+	data unsafe.Pointer,
 	dataStride int32,
 	dataFormat ImageFormatEnum,
 	sx int32,
