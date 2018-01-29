@@ -12,28 +12,21 @@ import "C"
 
 import "unsafe"
 
-type Host struct {
+var (
 	Width  int
 	Height int
 
 	app  uintptr
 	view uintptr
-}
+)
 
-func NewHost(width, height int) *Host {
-	var app uintptr
-	var view uintptr
-
+func Init(width, height int) {
 	C.hostInit(C.int(width), C.int(height), unsafe.Pointer(&app), unsafe.Pointer(&view))
 
-	return &Host{
-		Width:  width,
-		Height: height,
-		app:    app,
-		view:   view,
-	}
+	Width = width
+	Height = height
 }
 
-func (h *Host) PollEvent() bool {
-	return int32(C.hostPollEvent(unsafe.Pointer(h.app), unsafe.Pointer(h.view))) == 0
+func PollEvent() bool {
+	return int32(C.hostPollEvent(unsafe.Pointer(app), unsafe.Pointer(view))) == 0
 }

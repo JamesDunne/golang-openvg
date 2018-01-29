@@ -10,29 +10,38 @@ package host
 */
 import "C"
 
+// Known Go callback trampoline functions:
+
 //export appInit
 func appInit(surfaceWidth, surfaceHeight C.VGint) {
-
+	if cb := initFunc; cb != nil {
+		cb(int32(surfaceWidth), int32(surfaceHeight))
+	}
 }
 
 //export appDestroy
 func appDestroy() {
-
+	if cb := destroyFunc; cb != nil {
+		cb()
+	}
 }
 
 //export appResize
 func appResize(surfaceWidth, surfaceHeight C.VGint) {
-
+	if cb := resizeFunc; cb != nil {
+		cb(int32(surfaceWidth), int32(surfaceHeight))
+	}
 }
 
 //export appDraw
-func appDraw(width, height int32) {
-	if drawFunc != nil {
-		drawFunc(width, height)
+func appDraw(surfaceWidth, surfaceHeight C.VGint) {
+	if cb := drawFunc; cb != nil {
+		cb(int32(surfaceWidth), int32(surfaceHeight))
 	}
 }
 
 // handle mouse events
+
 //export mouseLeftButtonDown
 func mouseLeftButtonDown(x, y C.VGint) {
 
@@ -68,10 +77,20 @@ func keyUp(k uint16) {
 
 }
 
-type DrawFunc func(int32, int32)
+type SurfaceCallbackFunc func(width, height int32)
+type VoidCallbackFunc func()
+type PositionCallbackFunc func(x, y int32)
 
-var drawFunc DrawFunc = nil
+var initFunc SurfaceCallbackFunc = nil
+var destroyFunc VoidCallbackFunc = nil
+var resizeFunc SurfaceCallbackFunc = nil
+var drawFunc SurfaceCallbackFunc = nil
+var mouseLeftButtonDownFunc PositionCallbackFunc = nil
+var mouseLeftButtonUpFunc PositionCallbackFunc = nil
+var mouseRightButtonDownFunc PositionCallbackFunc = nil
+var mouseRightButtonUpFunc PositionCallbackFunc = nil
+var mouseMoveFunc PositionCallbackFunc = nil
 
-func (h *Host) UseDrawFunc(draw DrawFunc) {
+func UseDrawFunc(draw SurfaceCallbackFunc) {
 	drawFunc = draw
 }
