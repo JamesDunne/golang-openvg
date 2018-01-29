@@ -57,6 +57,7 @@ VGboolean done;
     // fps counter
     VGuint time0, time1;
     VGuint framesCounter;
+
 }
 
 /*****************************************************************
@@ -685,9 +686,9 @@ void applicationMenuCreate(TutorialView* view) {
     mainMenuPopulate(view);
 }
 
-int vgMain(int width, int height) {
+void hostInit(int width, int height, void* appOut, void* viewOut) {
 
-    @autoreleasepool {
+    //@autoreleasepool {
 
         NSRect frame = NSMakeRect(0, 0, width, height);
 
@@ -718,22 +719,26 @@ int vgMain(int width, int height) {
         applicationMenuCreate(view);
         [app finishLaunching];
 
-        // enter main loop
-        done = VG_FALSE;
-        while (!done) {
-            // dispatch events
-            NSEvent* event = [app nextEventMatchingMask: NSEventMaskAny untilDate: [NSDate dateWithTimeIntervalSinceNow: 0.0] inMode: NSDefaultRunLoopMode dequeue: true];
-            if (event != nil) {
-                [app sendEvent: event];
-                [app updateWindows];
-            }
-            else {
-                // modify UI (in this case window title, in order to show FPS) within the main thread
-                [view windowTitleUpdate];
-            }
-        }
+		*(void**)appOut = app;
+		*(void**)viewOut = view;
 
-    } // @autoreleasepool
+    //} // @autoreleasepool
 
-    return EXIT_SUCCESS;
+}
+
+VGboolean hostPollEvent(void* ptr) {
+	NSApplication* app = (NSApplication*)ptr;
+
+    // dispatch events
+    NSEvent* event = [app nextEventMatchingMask: NSEventMaskAny untilDate: [NSDate dateWithTimeIntervalSinceNow: 0.0] inMode: NSDefaultRunLoopMode dequeue: true];
+    if (event != nil) {
+        [app sendEvent: event];
+        [app updateWindows];
+    }
+    //else {
+    //    // modify UI (in this case window title, in order to show FPS) within the main thread
+    //    [view windowTitleUpdate];
+    //}
+
+	return done;
 }
