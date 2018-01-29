@@ -6,10 +6,14 @@ import (
 
 	"github.com/JamesDunne/golang-openvg/host"
 	"github.com/JamesDunne/golang-openvg/vg"
-	"github.com/JamesDunne/golang-openvg/vgu"
+	_ "github.com/JamesDunne/golang-openvg/vgu"
 )
 
+var f *host.Font
+
 func initVG(width, height int32) {
+	f = host.NewSansFont()
+
 	clearColor := &[]float32{0.0, 0.0, 1.0, 1.0}[0]
 	tileColor := &[]float32{0.0, 1.0, 0.0, 1.0}[0]
 
@@ -26,6 +30,7 @@ func initVG(width, height int32) {
 
 // Rendering is done on a specific OS thread managed by host:
 func drawVG(width, height int32) {
+	vg.LoadIdentity()
 	vg.Clear(0, 0, width, height)
 
 	color := vg.CreatePaint()
@@ -34,10 +39,14 @@ func drawVG(width, height int32) {
 
 	vg.SetPaint(color, uint32(vg.FillPath|vg.StrokePath))
 
-	path := vg.CreatePath(0 /* vg.PathFormatStandard */, vg.PathDatatypeF, 1.0, 0.0, 0, 0, uint32(vg.PathCapabilityAll))
-	vgu.RoundRect(path, 3, 3, 400, 100, 9, 9)
-	vg.DrawPath(path, uint32(vg.FillPath))
-	vg.DestroyPath(path)
+	//	path := vg.CreatePath(0 /* vg.PathFormatStandard */, vg.PathDatatypeF, 1.0, 0.0, 0, 0, uint32(vg.PathCapabilityAll))
+	//	vgu.RoundRect(path, 3, 3, 400, 100, 9, 9)
+	//	vg.DrawPath(path, uint32(vg.FillPath))
+	//	vg.DestroyPath(path)
+
+	vg.LoadIdentity()
+	vg.Translate(10, 100)
+	host.Text("hello world", f)
 }
 
 func main() {
