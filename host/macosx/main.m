@@ -686,7 +686,7 @@ void applicationMenuCreate(TutorialView* view) {
     mainMenuPopulate(view);
 }
 
-void hostInit(int width, int height, void* appOut, void* viewOut) {
+VGboolean hostInit(int width, int height, void* appOut, void* viewOut) {
 
     //@autoreleasepool {
 
@@ -725,6 +725,7 @@ void hostInit(int width, int height, void* appOut, void* viewOut) {
 
     //} // @autoreleasepool
 
+	return VG_TRUE;
 }
 
 VGboolean hostPollEvent(void* appPtr, void* viewPtr) {
