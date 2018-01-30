@@ -25,7 +25,7 @@ func RGB(r, g, b uint8) Color {
 }
 
 func (c *Color) UInt32() uint32 {
-	return uint32(c[0])<<16 | uint32(c[1])<<8 | uint32(c[2])
+	return uint32(255)<<24 | uint32(c[0])<<16 | uint32(c[1])<<8 | uint32(c[2])
 }
 
 type UIPalette [5]Color
@@ -74,12 +74,10 @@ type UI struct {
 	p UIPalette
 	w Window
 
-	font  *int
-	paint uint32
-	path  uint32
-
-	fillColor   Color
-	strokeColor Color
+	font        *Font
+	fillPaint   uint32
+	strokePaint uint32
+	path        uint32
 
 	Touches []Touch
 }
@@ -101,10 +99,45 @@ func (u *UI) Window() Window {
 	return u.w
 }
 
+func (ui *UI) Init() {
+	ui.font = NewSansFont()
+
+	ui.fillPaint = vg.CreatePaint()
+	vg.SetParameteri(ui.fillPaint, int32(vg.PaintType), int32(vg.PaintTypeColor))
+	vg.SetParameterfv(ui.fillPaint, int32(vg.PaintColor), 4, &[]float32{1.0, 1.0, 1.0, 1.0}[0])
+	vg.SetPaint(ui.fillPaint, uint32(vg.FillPath))
+
+	ui.strokePaint = vg.CreatePaint()
+	vg.SetParameteri(ui.strokePaint, int32(vg.PaintType), int32(vg.PaintTypeColor))
+	vg.SetParameterfv(ui.strokePaint, int32(vg.PaintColor), 4, &[]float32{1.0, 1.0, 1.0, 1.0}[0])
+	vg.SetPaint(ui.strokePaint, uint32(vg.StrokePath))
+
+	clearColor := &[]float32{0.0, 0.0, 0.0, 1.0}[0]
+	//tileColor := &[]float32{0.0, 1.0, 0.0, 1.0}[0]
+
+	// set some default parameters for the OpenVG context
+	//vg.Seti(vg.FillRule, int32(vg.EvenOdd))
+	vg.Seti(vg.FillRule, int32(vg.NonZero))
+
+	vg.Setfv(vg.ClearColor, 4, clearColor)
+	//vg.Setfv(vg.TileFillColor, 4, tileColor)
+	vg.Setf(vg.StrokeLineWidth, 0.125)
+	vg.Seti(vg.StrokeCapStyle, int32(vg.CapButt))
+	vg.Seti(vg.StrokeJoinStyle, int32(vg.JoinBevel))
+	vg.Seti(vg.RenderingQuality, int32(vg.RenderingQualityBetter))
+	vg.Seti(vg.BlendMode, int32(vg.BlendSrc))
+}
+
+func (ui *UI) BeginFrame() {
+	vg.LoadIdentity()
+	vg.Clear(0, 0, int32(ui.w.W), int32(ui.w.H))
+}
+
+func (ui *UI) EndFrame() {
+}
+
 func (u *UI) FontFace(name string) {
-	//nvg.FontFace(u.vg, name)
-	// TODO
-	u.font = nil
+	// No-op
 }
 
 func (u *UI) Palette(p PaletteIndex) Color {
@@ -128,11 +161,11 @@ func (u *UI) LineCap(style vg.CapStyleEnum) {
 }
 
 func (u *UI) FillColor(c Color) {
-	u.fillColor = c
+	vg.SetColor(u.fillPaint, c.UInt32())
 }
 
 func (u *UI) StrokeColor(c Color) {
-	u.strokeColor = c
+	vg.SetColor(u.strokePaint, c.UInt32())
 }
 
 func (u *UI) StrokeWidth(size float32) {
@@ -148,13 +181,10 @@ func (u *UI) BeginPath() {
 
 func (u *UI) Fill() {
 	// TODO: figure this out
-	vg.SetColor(u.paint, u.fillColor.UInt32())
 	vg.DrawPath(u.path, uint32(vg.FillPath))
 }
 
 func (u *UI) Stroke() {
-	// TODO: figure this out
-	vg.SetColor(u.paint, u.strokeColor.UInt32())
 	vg.DrawPath(u.path, uint32(vg.StrokePath))
 }
 
@@ -171,10 +201,8 @@ func (u *UI) Circle(p Point, r float32) {
 }
 
 func (u *UI) TextPoint(p Point, size float32, align Alignment, string string) {
-	// TODO
-	//	nvg.FontSize(u.vg, size)
-	//	nvg.TextAlign(u.vg, align)
-	//	nvg.Text(u.vg, p.X, p.Y, string)
+	// TODO: alignment
+	Text(string, p.X, p.Y, size, u.font)
 }
 
 func (u *UI) Text(w Window, size float32, align Alignment, string string) {
