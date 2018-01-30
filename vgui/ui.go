@@ -229,6 +229,11 @@ func (u *UI) Circle(p Point, r float32) {
 	vgu.Ellipse(u.path, p.X, u.y(p.Y), r*2, r*2)
 }
 
+// Angles in radians, 0 is horizontal extending right.
+func (u *UI) Arc(p Point, r, a0, a1 float32) {
+	vgu.Arc(u.path, p.X, u.y(p.Y), r*2, r*2, a0*-180/math.Pi, (a1-a0)*-180/math.Pi, vgu.ArcOpen)
+}
+
 func (ui *UI) PrepareText(s string) *PreparedText {
 	f := ui.font
 
@@ -297,16 +302,6 @@ func (u *UI) TextPoint(p Point, size float32, align Alignment, t *PreparedText) 
 	}
 }
 
-//func Text(s string, x, y, size float32, align Alignment, f *Font) {
-//	t := NewText(s, f)
-//	TextRendered(t, x, y, size, align)
-//}
-
 func (u *UI) Text(w Window, size float32, align Alignment, t *PreparedText) {
 	u.TextPoint(w.AlignedPoint(align), size, align, t)
-}
-
-// Angles in radians, 0 is horizontal extending right.
-func (u *UI) Arc(p Point, r, a0, a1 float32) {
-	vgu.Arc(u.path, p.X, u.y(p.Y), r*2, r*2, a0*-180/math.Pi, (a1-a0)*-180/math.Pi, vgu.ArcOpen)
 }
