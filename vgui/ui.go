@@ -211,7 +211,7 @@ func (u *UI) Rect(w Window) {
 }
 
 func (u *UI) RoundedRect(w Window, radius float32) {
-	vgu.RoundRect(u.path, w.X, u.y(w.Y+w.H), w.W-1, w.H-1, radius, radius)
+	vgu.RoundRect(u.path, w.X, u.y(w.Y+w.H), w.W-1, w.H-1, radius*2, radius*2)
 }
 
 func (u *UI) Circle(p Point, r float32) {
@@ -219,8 +219,7 @@ func (u *UI) Circle(p Point, r float32) {
 }
 
 func (u *UI) TextPoint(p Point, size float32, align Alignment, string string) {
-	// TODO: alignment
-	Text(string, p.X, u.y(p.Y+size), size, u.font)
+	Text(string, p.X, u.y(p.Y+size), size, align, u.font)
 }
 
 func (u *UI) Text(w Window, size float32, align Alignment, string string) {

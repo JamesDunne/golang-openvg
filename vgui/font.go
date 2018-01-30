@@ -79,7 +79,7 @@ func NewSansFont() *Font {
 	return f
 }
 
-func Text(s string, x, y, size float32, f *Font) {
+func Text(s string, x, y, size float32, align Alignment, f *Font) {
 	mm := vg.Geti(vg.MatrixMode)
 
 	if mm != int32(vg.MatrixGlyphUserToSurface) {
@@ -90,6 +90,7 @@ func Text(s string, x, y, size float32, f *Font) {
 	runes := make([]uint32, utf8.RuneCountInString(s))
 	adjustX := make([]float32, len(runes))
 	adjustY := make([]float32, len(runes))
+	width := float32(0)
 	for i, character := range s {
 		glyph := f.characterMap[character]
 		if glyph == -1 {
@@ -99,6 +100,18 @@ func Text(s string, x, y, size float32, f *Font) {
 		// TODO: kerning
 		adjustX[i] = 0
 		adjustY[i] = 0
+		width += f.glyphAdvances[glyph]
+	}
+
+	if align&AlignCenter == AlignCenter {
+		x -= width * size * 0.5
+	} else if align&AlignRight == AlignRight {
+		x -= width * size
+	}
+	if align&AlignMiddle == AlignMiddle {
+		y += f.fontHeight * size * 0.5
+	} else if align&AlignBottom == AlignBottom {
+		y += f.fontHeight * size
 	}
 
 	vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
