@@ -235,11 +235,11 @@ func (u *UI) y(y float32) float32 {
 }
 
 func (u *UI) Rect(w Window) {
-	vgu.Rect(u.path, w.X, u.y(w.Y), w.W-1, w.H-1)
+	vgu.Rect(u.path, w.X, u.y(w.Y), w.W, w.H)
 }
 
 func (u *UI) RoundedRect(w Window, radius float32) {
-	vgu.RoundRect(u.path, w.X, u.y(w.Y+w.H), w.W-1, w.H-1, radius*2, radius*2)
+	vgu.RoundRect(u.path, w.X, u.y(w.Y+w.H), w.W, w.H, radius*2, radius*2)
 }
 
 func (u *UI) Circle(p Point, r float32) {
