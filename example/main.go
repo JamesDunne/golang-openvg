@@ -55,6 +55,49 @@ func initVG(width, height int32) {
 
 const size = 16
 
+func drawAmp(w vgui.Window, ampNo int) {
+	ui.StrokeWidth(1.0)
+	ui.StrokeColor(ui.Palette(3))
+	ui.Pane(w)
+
+	// Amp label at top center:
+	label, w := w.SplitH(size + 8)
+	ui.FillColor(ui.Palette(4))
+	ui.Text(label, size, vgui.AlignCenter|vgui.AlignTop, amps[ampNo])
+
+	// Tri-state buttons:
+	top, bottom := w.SplitH(size + 16)
+	btnHeight := top.W * 0.33333333
+	btnDirty, top := top.SplitV(btnHeight)
+	btnClean, btnAcoustic := top.SplitV(btnHeight)
+
+	if t := ui.Button(btnDirty, true, ptDirty); t != nil {
+
+	}
+	ui.Button(btnClean, false, ptClean)
+	ui.Button(btnAcoustic, false, ptAcoustic)
+
+	// FX toggles:
+	fxWidth := bottom.W / 5.0
+	mid, bottom := bottom.SplitH(bottom.H - (size + 16))
+	for i := 0; i < 5; i++ {
+		var btnFX vgui.Window
+		btnFX, bottom = bottom.SplitV(fxWidth)
+		ui.Button(btnFX, false, fxNames[i])
+	}
+
+	ui.StrokeColor(ui.Palette(3))
+	ui.Pane(mid)
+
+	gain, volume := mid.SplitV(mid.W * 0.5)
+	g := float32(96) / 127.0
+	ui.Dial(gain, ptGain, g, ptGainStr)
+	_, _ = gain, g
+	v := float32(98) / 127.0
+	ui.Dial(volume, ptVolume, v, ptVolumeStr)
+	_, _ = volume, v
+}
+
 // Rendering is done on a specific OS thread managed by host:
 func drawVG(width, height int32) {
 	// Update display window:
@@ -70,48 +113,6 @@ func drawVG(width, height int32) {
 	// Split screen for MG v JD:
 	mg, jd := bottom.SplitV(bottom.W * 0.5)
 
-	drawAmp := func(w vgui.Window, ampNo int) {
-		ui.StrokeWidth(1.0)
-		ui.StrokeColor(ui.Palette(3))
-		ui.Pane(w)
-
-		// Amp label at top center:
-		label, w := w.SplitH(size + 8)
-		ui.FillColor(ui.Palette(4))
-		ui.Text(label, size, vgui.AlignCenter|vgui.AlignTop, amps[ampNo])
-
-		// Tri-state buttons:
-		top, bottom := w.SplitH(size + 16)
-		btnHeight := top.W * 0.33333333
-		btnDirty, top := top.SplitV(btnHeight)
-		btnClean, btnAcoustic := top.SplitV(btnHeight)
-
-		if t := ui.Button(btnDirty, true, ptDirty); t != nil {
-
-		}
-		ui.Button(btnClean, false, ptClean)
-		ui.Button(btnAcoustic, false, ptAcoustic)
-
-		// FX toggles:
-		fxWidth := bottom.W / 5.0
-		mid, bottom := bottom.SplitH(bottom.H - (size + 16))
-		for i := 0; i < 5; i++ {
-			var btnFX vgui.Window
-			btnFX, bottom = bottom.SplitV(fxWidth)
-			ui.Button(btnFX, false, fxNames[i])
-		}
-
-		ui.StrokeColor(ui.Palette(3))
-		ui.Pane(mid)
-
-		gain, volume := mid.SplitV(mid.W * 0.5)
-		g := float32(96) / 127.0
-		ui.Dial(gain, ptGain, g, ptGainStr)
-		_, _ = gain, g
-		v := float32(98) / 127.0
-		ui.Dial(volume, ptVolume, v, ptVolumeStr)
-		_, _ = volume, v
-	}
 	drawAmp(mg, 0)
 	drawAmp(jd, 1)
 
