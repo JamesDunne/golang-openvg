@@ -37,7 +37,7 @@ func drawVG(width, height int32) {
 
 	color := vg.CreatePaint()
 	vg.SetParameteri(color, int32(vg.PaintType), int32(vg.PaintTypeColor))
-	vg.SetParameterfv(color, int32(vg.PaintColor), 4, &[]float32{0.0, 1.0, 0.0, 1.0}[0])
+	vg.SetParameterfv(color, int32(vg.PaintColor), 4, &[]float32{1.0, 1.0, 1.0, 0.8}[0])
 
 	vg.SetPaint(color, uint32(vg.FillPath|vg.StrokePath))
 
@@ -47,9 +47,7 @@ func drawVG(width, height int32) {
 	//	vg.DrawPath(path, uint32(vg.FillPath))
 	//	vg.DestroyPath(path)
 
-	vg.LoadIdentity()
-	vg.Translate(100, 150)
-	host.Text("HELLO world", f)
+	host.Text("Tripping on a Hole in a Paper Heart", 150, 200, 20, f)
 }
 
 func main() {

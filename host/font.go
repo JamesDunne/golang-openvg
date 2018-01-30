@@ -73,14 +73,12 @@ func NewSansFont() *Font {
 	return f
 }
 
-func Text(s string, f *Font) {
-	size := float32(14.0)
-	x := float32(0)
-	y := float32(0)
-
+func Text(s string, x, y, size float32, f *Font) {
 	mm := vg.Geti(vg.MatrixMode)
 
-	vg.Seti(vg.MatrixMode, int32(vg.MatrixGlyphUserToSurface))
+	if mm != int32(vg.MatrixGlyphUserToSurface) {
+		vg.Seti(vg.MatrixMode, int32(vg.MatrixGlyphUserToSurface))
+	}
 	vg.Seti(vg.FillRule, int32(vg.NonZero))
 
 	runes := make([]uint32, utf8.RuneCountInString(s))
@@ -103,5 +101,7 @@ func Text(s string, f *Font) {
 	vg.Scale(size, size)
 	vg.DrawGlyphs(f.vgHandle, int32(len(runes)), &runes[0], &adjustX[0], &adjustY[0], uint32(vg.FillPath), vg.False)
 
-	vg.Seti(vg.MatrixMode, mm)
+	if mm != int32(vg.MatrixGlyphUserToSurface) {
+		vg.Seti(vg.MatrixMode, mm)
+	}
 }
