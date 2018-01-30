@@ -38,8 +38,7 @@ func (ui *UI) Button(w Window, depressed bool, label *PreparedText) *Touch {
 	ui.FillColor(ui.Palette(c3))
 	ui.BeginPath()
 	ui.RoundedRect(w, round)
-	ui.Stroke()
-	ui.Fill()
+	ui.FillAndStroke()
 
 	ui.FillColor(ui.Palette(c1))
 	ui.Text(w, size, AlignCenter|AlignMiddle, label)
@@ -58,8 +57,7 @@ func (ui *UI) Label(w Window, t *PreparedText, align Alignment) {
 	ui.RoundedRect(w, round)
 	ui.StrokeColor(ui.Palette(3))
 	ui.FillColor(ui.Palette(1))
-	ui.Fill()
-	ui.Stroke()
+	ui.FillAndStroke()
 
 	lblText := w.Inner(pad*2, 0, pad*2, 0)
 	ui.FillColor(ui.Palette(4))

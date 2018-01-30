@@ -44,14 +44,13 @@ func initVG(width, height int32) {
 	ptGainStr = ui.PrepareText("0.68")
 	ptVolumeStr = ui.PrepareText("0 dB")
 
-	fxNames = [...]*vgui.PreparedText{
+	fxNames = [5]*vgui.PreparedText{
 		ui.PrepareText("pit1"),
 		ui.PrepareText("rtr1"),
 		ui.PrepareText("phr1"),
 		ui.PrepareText("cho1"),
 		ui.PrepareText("dly1"),
 	}
-
 }
 
 const size = 16
@@ -63,11 +62,6 @@ func drawVG(width, height int32) {
 	w := ui.Window()
 
 	ui.BeginFrame()
-
-	ui.FillColor(ui.Palette(0))
-	ui.BeginPath()
-	ui.Rect(w)
-	ui.Fill()
 
 	top, bottom := w.SplitH(size + 8)
 

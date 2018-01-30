@@ -205,12 +205,15 @@ func (u *UI) BeginPath() {
 }
 
 func (u *UI) Fill() {
-	// TODO: figure this out
 	vg.DrawPath(u.path, uint32(vg.FillPath))
 }
 
 func (u *UI) Stroke() {
 	vg.DrawPath(u.path, uint32(vg.StrokePath))
+}
+
+func (u *UI) FillAndStroke() {
+	vg.DrawPath(u.path, uint32(vg.FillPath|vg.StrokePath))
 }
 
 func (u *UI) y(y float32) float32 {
