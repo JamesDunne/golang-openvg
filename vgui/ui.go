@@ -85,6 +85,12 @@ type UI struct {
 	strokePaint uint32
 	path        uint32
 
+	saved struct {
+		strokeWidth      float32
+		strokeMiterLimit float32
+		lineCap          int32
+	}
+
 	Touches []Touch
 }
 
@@ -149,11 +155,15 @@ func (u *UI) Palette(p PaletteIndex) Color {
 }
 
 func (u *UI) Save() {
-	// TODO
+	u.saved.strokeWidth = vg.Getf(vg.StrokeLineWidth)
+	u.saved.strokeMiterLimit = vg.Getf(vg.StrokeMiterLimit)
+	u.saved.lineCap = vg.Geti(vg.StrokeCapStyle)
 }
 
 func (u *UI) Restore() {
-	// TODO
+	vg.Setf(vg.StrokeLineWidth, u.saved.strokeWidth)
+	vg.Setf(vg.StrokeMiterLimit, u.saved.strokeMiterLimit)
+	vg.Seti(vg.StrokeCapStyle, u.saved.lineCap)
 }
 
 func (u *UI) MiterLimit(limit float32) {

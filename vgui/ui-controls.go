@@ -7,7 +7,7 @@ import (
 )
 
 const pad = 2
-const size = 16.0
+const size = 14.0
 const round = 4.0
 
 func (ui *UI) isTouched(w Window) *Touch {
