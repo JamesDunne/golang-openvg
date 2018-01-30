@@ -98,7 +98,7 @@ func drawAmp(w vgui.Window, ampNo int) {
 	_, _ = volume, v
 }
 
-// Rendering is done on a specific OS thread managed by host:
+// Rendering is done on main thread managed by host:
 func drawVG(width, height int32) {
 	// Update display window:
 	ui.SetWindow(vgui.NewWindow(0, 0, float32(width), float32(height)))
