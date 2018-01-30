@@ -109,12 +109,14 @@ func drawVG(width, height int32) {
 	top, bottom := w.SplitH(size + 8)
 
 	ui.Label(top, ptSong, vgui.AlignLeft|vgui.AlignTop)
+	_, _ = top, bottom
 
 	// Split screen for MG v JD:
 	mg, jd := bottom.SplitV(bottom.W * 0.5)
 
 	drawAmp(mg, 0)
 	drawAmp(jd, 1)
+	_, _ = mg, jd
 
 	// Draw touch points:
 	for _, tp := range ui.Touches {

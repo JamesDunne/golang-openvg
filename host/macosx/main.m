@@ -688,7 +688,7 @@ void applicationMenuCreate(TutorialView* view) {
 
 VGboolean hostInit(int width, int height, void* appOut, void* viewOut) {
 
-    //@autoreleasepool {
+    // @autoreleasepool {
 
         NSRect frame = NSMakeRect(0, 0, width, height);
 
@@ -723,7 +723,7 @@ VGboolean hostInit(int width, int height, void* appOut, void* viewOut) {
 		*(void**)appOut = app;
 		*(void**)viewOut = view;
 
-    //} // @autoreleasepool
+    // } // @autoreleasepool
 
 	return VG_TRUE;
 }
@@ -732,16 +732,20 @@ VGboolean hostPollEvent(void* appPtr, void* viewPtr) {
 	NSApplication* app = (NSApplication*)appPtr;
 	TutorialView* view = (TutorialView*)viewPtr;
 
-    // dispatch events
-    NSEvent* event = [app nextEventMatchingMask: NSEventMaskAny untilDate: [NSDate dateWithTimeIntervalSinceNow: 0.0] inMode: NSDefaultRunLoopMode dequeue: true];
-    if (event != nil) {
-        [app sendEvent: event];
-        [app updateWindows];
-    }
-    else {
-        // modify UI (in this case window title, in order to show FPS) within the main thread
-        [view windowTitleUpdate];
-    }
+    @autoreleasepool {
+
+	    // dispatch events
+	    NSEvent* event = [app nextEventMatchingMask: NSEventMaskAny untilDate: [NSDate dateWithTimeIntervalSinceNow: 0.0] inMode: NSDefaultRunLoopMode dequeue: true];
+	    if (event != nil) {
+	        [app sendEvent: event];
+	        [app updateWindows];
+	    }
+	    else {
+	        // modify UI (in this case window title, in order to show FPS) within the main thread
+	        [view windowTitleUpdate];
+	    }
+	
+	}
 
 	return done;
 }
