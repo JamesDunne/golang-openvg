@@ -295,11 +295,11 @@ func (u *UI) TextPoint(p Point, size float32, align Alignment, t *PreparedText) 
 	} else if align&AlignRight == AlignRight {
 		x -= t.width * size
 	}
-	y += f.descenderHeight * size
+	//y += f.descenderHeight * size
 	if align&AlignMiddle == AlignMiddle {
-		y += (f.fontHeight - f.descenderHeight) * size * 0.5
+		y += (f.fontHeight) * size * 0.5
 	} else if align&AlignBottom == AlignBottom {
-		y += (f.fontHeight - f.descenderHeight) * size
+		y += (f.fontHeight) * size
 	}
 
 	mm := vg.Geti(vg.MatrixMode)
@@ -312,7 +312,7 @@ func (u *UI) TextPoint(p Point, size float32, align Alignment, t *PreparedText) 
 	vg.LoadIdentity()
 	vg.Translate(x, y)
 	vg.Scale(size, size)
-	vg.DrawGlyphs(f.vgHandle, int32(len(t.runes)), &t.runes[0], &t.adjustX[0], &t.adjustY[0], uint32(vg.FillPath), vg.False)
+	vg.DrawGlyphs(f.vgHandle, int32(len(t.runes)), &t.runes[0], &t.adjustX[0], &t.adjustY[0], uint32(vg.FillPath), vg.True)
 
 	if mm != int32(vg.MatrixGlyphUserToSurface) {
 		vg.Seti(vg.MatrixMode, mm)
