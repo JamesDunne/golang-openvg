@@ -92,14 +92,16 @@ func PollEvent() bool {
 	if cb := DrawFunc; cb != nil {
 		cb(Width, Height)
 	}
-	SwapBuffers()
+	if err := SwapBuffers(); err != nil {
+		panic(err)
+	}
 
 	return true
 }
 
 func SwapBuffers() error {
-	if retval := C.eglSwapBuffers(C.EGLDisplay(display), C.EGLSurface(surface)); retval != C.EGL_SUCCESS {
-		return EGLerror(retval)
+	if retval := C.eglSwapBuffers(C.EGLDisplay(display), C.EGLSurface(surface)); retval != C.EGL_TRUE {
+		return EGLerror(C.eglGetError())
 	}
 	return nil
 }
