@@ -48,7 +48,7 @@ func drawVG(width, height int32) {
 
 	vg.LoadIdentity()
 	vg.Translate(100, 150)
-	//host.Text("HELLO world", f)
+	host.Text("HELLO world", f)
 }
 
 func main() {

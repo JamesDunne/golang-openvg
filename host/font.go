@@ -1,9 +1,6 @@
 // font
 package host
 
-//#include "DejaVuSans.h"
-import "C"
-
 import (
 	"unsafe"
 
@@ -11,45 +8,42 @@ import (
 )
 
 type Font struct {
+	vgHandle uint32
+
 	count           int
-	descenderHeight C.int
-	fontHeight      C.int
-	characterMap    []C.short
-	glyphAdvances   []C.int
+	descenderHeight float32
+	fontHeight      float32
+	characterMap    []int16
+	glyphAdvances   []float32
 	glyphs          []uint32
 }
 
 func NewSansFont() *Font {
-	count := int(C.DejaVuSans_glyphCount)
+	count := font_sans_glyphCount
 
 	f := &Font{
+		vgHandle:        vg.CreateFont(int32(count)),
 		count:           count,
-		fontHeight:      C.DejaVuSans_font_height,
-		descenderHeight: C.DejaVuSans_descender_height,
-		characterMap:    make([]C.short, 500),
-		glyphAdvances:   make([]C.int, count),
+		fontHeight:      font_sans_font_height,
+		descenderHeight: font_sans_descender_height,
+		characterMap:    font_sans_characterMap[:],
+		glyphAdvances:   font_sans_glyphAdvances[:],
 		glyphs:          make([]uint32, count),
 	}
 
-	n := 0
-	n = copy(f.characterMap, C.DejaVuSans_characterMap[:])
-	if n != 500 {
-		panic("n != 500")
-	}
-	n = copy(f.glyphAdvances, C.DejaVuSans_glyphAdvances[:])
-	if n != count {
-		panic("n != count")
-	}
-
 	for i := 0; i < count; i++ {
-		p := unsafe.Pointer(&C.DejaVuSans_glyphPoints[C.DejaVuSans_glyphPointIndices[i]*2])
-		instructions := (*uint8)(&C.DejaVuSans_glyphInstructions[C.DejaVuSans_glyphInstructionIndices[i]])
-		ic := int32(C.DejaVuSans_glyphInstructionCounts[i])
+		pi := font_sans_glyphPointIndices[i] * 2
+		if pi >= int32(len(font_sans_glyphPoints)) {
+			continue
+		}
+		p := unsafe.Pointer(&font_sans_glyphPoints[pi])
+		instructions := (*uint8)(&font_sans_glyphInstructions[font_sans_glyphInstructionIndices[i]])
+		ic := int32(font_sans_glyphInstructionCounts[i])
 
 		path := vg.CreatePath(
 			0, /* VG_PATH_FORMAT_STANDARD */
-			vg.PathDatatypeS32,
-			1.0/65536.0, 0.0,
+			vg.PathDatatypeF,
+			1.0, 0.0,
 			0, 0,
 			uint32(vg.PathCapabilityAll))
 		f.glyphs[i] = path
@@ -57,8 +51,9 @@ func NewSansFont() *Font {
 		if ic != 0 {
 			vg.AppendPathData(path, ic, instructions, p)
 			if vg.GetError() != vg.NoError {
-				panic("error!")
+				panic("VG error!")
 			}
+			vg.SetGlyphToPath(f.vgHandle, uint32(i), path, vg.False, [2]float32{0, 0}, [2]float32{f.glyphAdvances[i], 0.0})
 		}
 	}
 
@@ -95,7 +90,7 @@ func Text(s string, f *Font) {
 			panic("error!")
 		}
 
-		xx += size * float32(f.glyphAdvances[glyph]) / 65536.0
+		xx += size * float32(f.glyphAdvances[glyph])
 	}
 
 	vg.LoadMatrix(&mm[0])
