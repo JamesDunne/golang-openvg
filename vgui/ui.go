@@ -208,9 +208,6 @@ func (u *UI) StrokeWidth(size float32) {
 }
 
 func (u *UI) BeginPath() {
-	//	if u.path != 0 {
-	//		vg.DestroyPath(u.path)
-	//	}
 	u.path = vg.CreatePath(0, vg.PathDatatypeF, 1.0, 0.0, 0, 0, uint32(vg.PathCapabilityAll))
 }
 func (u *UI) EndPath() {
