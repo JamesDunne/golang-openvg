@@ -205,12 +205,12 @@ func (u *UI) RoundedRect(w Window, radius float32) {
 }
 
 func (u *UI) Circle(p Point, r float32) {
-	vgu.Ellipse(u.path, p.X, u.y(p.Y), r, r)
+	vgu.Ellipse(u.path, p.X, u.y(p.Y), r*2, r*2)
 }
 
 func (u *UI) TextPoint(p Point, size float32, align Alignment, string string) {
 	// TODO: alignment
-	Text(string, p.X, u.y(p.Y), size, u.font)
+	Text(string, p.X, u.y(p.Y+size), size, u.font)
 }
 
 func (u *UI) Text(w Window, size float32, align Alignment, string string) {
@@ -219,5 +219,5 @@ func (u *UI) Text(w Window, size float32, align Alignment, string string) {
 
 // Angles in radians, 0 is horizontal extending right.
 func (u *UI) Arc(p Point, r, a0, a1 float32) {
-	vgu.Arc(u.path, p.X, u.y(p.Y), r, r, a0*-180/math.Pi, (a1-a0)*-180/math.Pi, vgu.ArcOpen)
+	vgu.Arc(u.path, p.X, u.y(p.Y), r*2, r*2, a0*-180/math.Pi, (a1-a0)*-180/math.Pi, vgu.ArcOpen)
 }
