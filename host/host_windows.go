@@ -73,15 +73,3 @@ keyUp(const unsigned short k)
 
 */
 import "C"
-
-type VG struct {
-	Width  uint32
-	Height uint32
-
-	display uintptr
-	surface uintptr
-}
-
-func Run(width, height int) {
-	C.vgMain(C.int(width), C.int(height))
-}

@@ -20,7 +20,7 @@ type Font struct {
 }
 
 func NewSansFont() *Font {
-	count := C.DejaVuSans_glyphCount
+	count := int(C.DejaVuSans_glyphCount)
 
 	f := &Font{
 		count:           count,
