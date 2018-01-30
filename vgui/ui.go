@@ -260,6 +260,8 @@ func (ui *UI) PrepareText(s string) *PreparedText {
 	return t
 }
 
+var glyphOrigin = []float32{0, 0}
+
 func (u *UI) TextPoint(p Point, size float32, align Alignment, t *PreparedText) {
 	f := t.font
 
@@ -284,7 +286,7 @@ func (u *UI) TextPoint(p Point, size float32, align Alignment, t *PreparedText) 
 	}
 
 	vg.Seti(vg.FillRule, int32(vg.NonZero))
-	vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
+	vg.Setfv(vg.GlyphOrigin, 2, &glyphOrigin[0])
 	vg.LoadIdentity()
 	vg.Translate(x, y)
 	vg.Scale(size, size)
