@@ -2,6 +2,7 @@ package vg
 
 //#cgo darwin LDFLAGS: -L../host/lib/macosx/ub/gle/standalone -lAmanithVG
 //#cgo windows LDFLAGS: -L../host/lib/win/x86_64/gle/standalone -lAmanithVG
+//#cgo rpi LDFLAGS: -L/opt/vc/lib -lOpenVG -lGLESv2 -lEGL
 //#include "VG/openvg.h"
 import "C"
 

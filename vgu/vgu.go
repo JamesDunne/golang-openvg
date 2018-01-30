@@ -2,6 +2,7 @@ package vgu
 
 //#cgo darwin LDFLAGS: -L../host/lib/macosx/ub/gle/standalone -lAmanithVG
 //#cgo windows LDFLAGS: -L../host/lib/win/x86_64/gle/standalone -lAmanithVG
+//#cgo rpi LDFLAGS: -L/opt/vc/lib -lOpenVG -lEGL -lGLESv2
 //#include "VG/vgu.h"
 import "C"
 
