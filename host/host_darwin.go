@@ -37,3 +37,7 @@ func Destroy() {
 func PollEvent() bool {
 	return int32(C.hostPollEvent(unsafe.Pointer(app), unsafe.Pointer(view))) == 0
 }
+
+func Draw() {
+	C.hostDraw(unsafe.Pointer(view))
+}

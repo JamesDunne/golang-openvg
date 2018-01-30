@@ -52,8 +52,10 @@ VGboolean done;
     // OpenGL texture used to blit the AmanithVG SRE surface
     GLuint blitTexture;
 #endif
+#ifdef CVD
     // a Core Video display link
     CVDisplayLinkRef displayLink;
+#endif
     // fps counter
     VGuint time0, time1;
     VGuint framesCounter;
@@ -401,6 +403,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     // init tutorial application (OpenVG related code)
     appInit([self openvgSurfaceWidthGet], [self openvgSurfaceHeightGet]);
 
+#ifdef CVD
     // create a display link capable of being used with all active displays
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
 
@@ -414,6 +417,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     // activate the display link
     CVDisplayLinkStart(displayLink);
+#endif
 
     // start frame counter
     time0 = [self getTimeMS];
@@ -491,6 +495,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void) dealloc {
 
+#ifdef CVD
     // stop the display link BEFORE releasing anything in the view
     // otherwise the display link thread may call into the view and crash
     // when it encounters something that has been release
@@ -498,6 +503,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     // release the display link
     CVDisplayLinkRelease(displayLink);
+#endif
 
     // destroy OpenVG resources created by the tutorial
     appDestroy();
@@ -644,10 +650,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     (void)note;
 
+#ifdef CVD
     // Stop the display link when the window is closing because default
     // OpenGL render buffers will be destroyed. If display link continues to
     // fire without renderbuffers, OpenGL draw calls will set errors.
     CVDisplayLinkStop(displayLink);
+#endif
+
     done = VG_TRUE;
 }
 
@@ -748,4 +757,12 @@ VGboolean hostPollEvent(void* appPtr, void* viewPtr) {
 	}
 
 	return done;
+}
+
+void hostDraw(void* viewPtr) {
+    TutorialView* view = (TutorialView*)viewPtr;
+
+    @autoreleasepool {
+        [view drawRect:[view bounds]];
+    }
 }

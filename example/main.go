@@ -148,6 +148,7 @@ func main() {
 
 	// Event polling with idle loop:
 	for host.PollEvent() {
+		host.Draw()
 	}
 
 	host.Destroy()
