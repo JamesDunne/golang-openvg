@@ -108,10 +108,11 @@ func Text(s string, x, y, size float32, align Alignment, f *Font) {
 	} else if align&AlignRight == AlignRight {
 		x -= width * size
 	}
+	y += f.descenderHeight * size
 	if align&AlignMiddle == AlignMiddle {
-		y += f.fontHeight * size * 0.5
+		y += (f.fontHeight - f.descenderHeight) * size * 0.5
 	} else if align&AlignBottom == AlignBottom {
-		y += f.fontHeight * size
+		y += (f.fontHeight - f.descenderHeight) * size
 	}
 
 	vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
