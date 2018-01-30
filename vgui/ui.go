@@ -18,14 +18,18 @@ const (
 	AlignBottom
 )
 
-type Color [3]uint8
+type Color [4]uint8
 
 func RGB(r, g, b uint8) Color {
-	return Color([3]uint8{r, g, b})
+	return Color([4]uint8{r, g, b, 255})
+}
+
+func RGBA(r, g, b, a uint8) Color {
+	return Color([4]uint8{r, g, b, a})
 }
 
 func (c *Color) UInt32() uint32 {
-	return uint32(255)<<24 | uint32(c[0])<<16 | uint32(c[1])<<8 | uint32(c[2])
+	return uint32(c[0])<<24 | uint32(c[1])<<16 | uint32(c[2])<<8 | uint32(c[3])
 }
 
 type UIPalette [5]Color
