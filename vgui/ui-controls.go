@@ -7,7 +7,6 @@ import (
 )
 
 const pad = 2
-const size = 14.0
 const round = 4.0
 
 func (ui *UI) isTouched(w Window) *Touch {
@@ -42,7 +41,7 @@ func (ui *UI) Button(w Window, depressed bool, label *PreparedText) *Touch {
 	ui.EndPath()
 
 	ui.FillColor(ui.Palette(c1))
-	ui.Text(w, size, AlignCenter|AlignMiddle, label)
+	ui.Text(w, ui.size, AlignCenter|AlignMiddle, label)
 
 	return touched
 }
@@ -64,12 +63,12 @@ func (ui *UI) Label(w Window, t *PreparedText, align Alignment) {
 
 	lblText := w.Inner(pad*2, 0, pad*2, 0)
 	ui.FillColor(ui.Palette(4))
-	ui.Text(lblText, size, align, t)
+	ui.Text(lblText, ui.size, align, t)
 }
 
 func (ui *UI) Dial(w Window, label *PreparedText, value float32, valueStr *PreparedText) (Window, *Touch) {
-	top, bottom := w.SplitH(size + 8)
-	w, bottom = bottom.SplitH(bottom.H - (size + 8))
+	top, bottom := w.SplitH(ui.size + 8)
+	w, bottom = bottom.SplitH(bottom.H - (ui.size + 8))
 
 	c := w.AlignedPoint(AlignCenter | AlignMiddle)
 	r := w.RadiusMin()

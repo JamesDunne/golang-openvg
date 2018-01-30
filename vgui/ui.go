@@ -82,6 +82,7 @@ type UI struct {
 	w Window
 
 	font        *Font
+	size        float32
 	fillPaint   uint32
 	strokePaint uint32
 	path        uint32
@@ -99,6 +100,7 @@ func NewUI() *UI {
 	ui := &UI{
 		p:       palette,
 		Touches: make([]Touch, 10),
+		size:    14.0,
 	}
 
 	return ui
@@ -110,6 +112,14 @@ func (u *UI) SetWindow(w Window) {
 
 func (u *UI) Window() Window {
 	return u.w
+}
+
+func (u *UI) SetFontSize(size float32) {
+	u.size = size
+}
+
+func (u *UI) FontSize() float32 {
+	return u.size
 }
 
 func (ui *UI) Init() {
