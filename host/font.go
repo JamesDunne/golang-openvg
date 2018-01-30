@@ -15,7 +15,6 @@ type Font struct {
 	fontHeight      float32
 	characterMap    []int16
 	glyphAdvances   []float32
-	glyphs          []uint32
 }
 
 func NewSansFont() *Font {
@@ -28,7 +27,6 @@ func NewSansFont() *Font {
 		descenderHeight: font_sans_descender_height,
 		characterMap:    font_sans_characterMap[:],
 		glyphAdvances:   font_sans_glyphAdvances[:],
-		glyphs:          make([]uint32, count),
 	}
 
 	for i := 0; i < count; i++ {
@@ -46,28 +44,42 @@ func NewSansFont() *Font {
 			1.0, 0.0,
 			0, 0,
 			uint32(vg.PathCapabilityAll))
-		f.glyphs[i] = path
 
 		if ic != 0 {
 			vg.AppendPathData(path, ic, instructions, p)
 			if vg.GetError() != vg.NoError {
 				panic("VG error!")
 			}
-			vg.SetGlyphToPath(f.vgHandle, uint32(i), path, vg.False, [2]float32{0, 0}, [2]float32{f.glyphAdvances[i], 0.0})
+			// remove "editing" capabilities, so that OpenVG driver can try to free some memory
+			vg.RemovePathCapabilities(
+				path,
+				uint32(vg.PathCapabilityAppendFrom|vg.PathCapabilityAppendTo|
+					vg.PathCapabilityModify|vg.PathCapabilityTransformFrom|
+					vg.PathCapabilityTransformTo|vg.PathCapabilityInterpolateFrom|
+					vg.PathCapabilityInterpolateTo),
+			)
 		}
+
+		// Create OpenVG font glyph:
+		vg.SetGlyphToPath(f.vgHandle, uint32(i), path, vg.False, [2]float32{0, 0}, [2]float32{f.glyphAdvances[i], 0.0})
+		if vg.GetError() != vg.NoError {
+			panic("VG error!")
+		}
+
+		vg.DestroyPath(path)
 	}
 
 	return f
 }
 
 func Text(s string, f *Font) {
-	size := float32(22.0)
+	size := float32(14.0)
 	x := float32(0)
 	y := float32(0)
 	xx := x
-	var mm [9]float32
 
-	vg.GetMatrix(&mm[0])
+	vg.Seti(vg.MatrixMode, int32(vg.MatrixGlyphUserToSurface))
+	vg.Seti(vg.FillRule, int32(vg.NonZero))
 
 	for _, character := range s {
 		glyph := f.characterMap[character]
@@ -75,23 +87,20 @@ func Text(s string, f *Font) {
 			continue
 		}
 
-		mat := [9]float32{
-			size, 0, 0,
-			0, size, 0,
-			xx, y, 1.0,
-		}
-		vg.LoadMatrix(&mm[0])
-		vg.MultMatrix(&mat[0])
-		_ = mat
+		escapement := f.glyphAdvances[glyph]
 
-		//		vg.DrawPath(f.glyphs[glyph], uint32(vg.FillPath))
-		vg.DrawPath(f.glyphs[glyph], uint32(vg.StrokePath))
+		vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
+		vg.LoadIdentity()
+		vg.Translate(xx, y)
+		vg.Scale(size, size)
+		vg.DrawGlyph(f.vgHandle, uint32(glyph), uint32(vg.FillPath), vg.False)
+
 		if vg.GetError() != vg.NoError {
-			panic("error!")
+			panic("VG error!")
 		}
 
-		xx += size * float32(f.glyphAdvances[glyph])
+		xx += size * escapement
 	}
 
-	vg.LoadMatrix(&mm[0])
+	vg.Seti(vg.MatrixMode, int32(vg.MatrixPathUserToSurface))
 }

@@ -41,10 +41,11 @@ func drawVG(width, height int32) {
 
 	vg.SetPaint(color, uint32(vg.FillPath|vg.StrokePath))
 
-	path := vg.CreatePath(0 /* vg.PathFormatStandard */, vg.PathDatatypeF, 1.0, 0.0, 0, 0, uint32(vg.PathCapabilityAll))
-	vgu.RoundRect(path, 3, 3, 400, 100, 9, 9)
-	vg.DrawPath(path, uint32(vg.FillPath))
-	vg.DestroyPath(path)
+	_ = vgu.ArcChord
+	//	path := vg.CreatePath(0 /* vg.PathFormatStandard */, vg.PathDatatypeF, 1.0, 0.0, 0, 0, uint32(vg.PathCapabilityAll))
+	//	vgu.RoundRect(path, 3, 3, 400, 100, 9, 9)
+	//	vg.DrawPath(path, uint32(vg.FillPath))
+	//	vg.DestroyPath(path)
 
 	vg.LoadIdentity()
 	vg.Translate(100, 150)
