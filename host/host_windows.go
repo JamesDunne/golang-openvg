@@ -32,3 +32,7 @@ func Destroy() int {
 func PollEvent() bool {
 	return int32(C.hostPollEvent()) == 0
 }
+
+func Draw() {
+	C.hostDraw()
+}

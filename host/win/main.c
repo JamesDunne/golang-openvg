@@ -637,7 +637,7 @@ VGboolean hostInit(int width, int height) {
 	return VG_TRUE;
 }
 
-VGboolean hostPollEvent() {
+VGboolean hostPollEvent(void) {
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         if (msg.message == WM_QUIT) {
             return VG_TRUE;
@@ -645,18 +645,20 @@ VGboolean hostPollEvent() {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-    } else {
-        // update window title (show FPS)
-        windowTitleUpdate();
-        // draw the scene
-        appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
-        // advance the frames counter
-        framesCounter++;
-        // present the scene on screen
-        windowBuffersSwap();
     }
 
 	return VG_FALSE;
+}
+
+void hostDraw(void) {
+    // update window title (show FPS)
+    windowTitleUpdate();
+    // draw the scene
+    appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+    // advance the frames counter
+    framesCounter++;
+    // present the scene on screen
+    windowBuffersSwap();
 }
 
 int hostDestroy(void) {
