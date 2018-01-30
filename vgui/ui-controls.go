@@ -42,7 +42,7 @@ func (ui *UI) Button(w Window, depressed bool, label string) *Touch {
 	ui.Fill()
 
 	ui.FillColor(ui.Palette(c1))
-	ui.Text(w, size, AlignCenter|AlignMiddle, label)
+	ui.Text(w, size, AlignCenter|AlignMiddle, ui.PrepareText(label))
 
 	return touched
 }
@@ -53,7 +53,7 @@ func (ui *UI) Pane(w Window) {
 	ui.Stroke()
 }
 
-func (ui *UI) Label(w Window, string string, align Alignment) {
+func (ui *UI) Label(w Window, t *PreparedText, align Alignment) {
 	ui.BeginPath()
 	ui.RoundedRect(w, round)
 	ui.StrokeColor(ui.Palette(3))
@@ -63,10 +63,10 @@ func (ui *UI) Label(w Window, string string, align Alignment) {
 
 	lblText := w.Inner(pad*2, 0, pad*2, 0)
 	ui.FillColor(ui.Palette(4))
-	ui.Text(lblText, size, align, string)
+	ui.Text(lblText, size, align, t)
 }
 
-func (ui *UI) Dial(w Window, label string, value float32, valueStr string) (Window, *Touch) {
+func (ui *UI) Dial(w Window, label *PreparedText, value float32, valueStr *PreparedText) (Window, *Touch) {
 	top, bottom := w.SplitH(size + 8)
 	w, bottom = bottom.SplitH(bottom.H - (size + 8))
 

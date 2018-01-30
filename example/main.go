@@ -11,11 +11,34 @@ import (
 var f *vgui.Font
 var ui *vgui.UI
 
+var amps [2]*vgui.PreparedText
+var (
+	ptSong      *vgui.PreparedText
+	ptAcoustic  *vgui.PreparedText
+	ptDirty     *vgui.PreparedText
+	ptClean     *vgui.PreparedText
+	ptGain      *vgui.PreparedText
+	ptVolume    *vgui.PreparedText
+	ptGainStr   *vgui.PreparedText
+	ptVolumeStr *vgui.PreparedText
+)
+
 func initVG(width, height int32) {
 	ui = vgui.NewUI()
 
 	ui.Init()
 	ui.SetWindow(vgui.NewWindow(0, 0, float32(width), float32(height)))
+
+	amps = [2]*vgui.PreparedText{ui.PrepareText("MG"), ui.PrepareText("JD")}
+
+	ptSong = ui.PrepareText("Trippin on a Hole in a Paper Heart")
+	ptAcoustic = ui.PrepareText("acoustic")
+	ptDirty = ui.PrepareText("dirty")
+	ptClean = ui.PrepareText("clean")
+	ptGain = ui.PrepareText("Gain")
+	ptVolume = ui.PrepareText("Volume")
+	ptGainStr = ui.PrepareText("0.68")
+	ptVolumeStr = ui.PrepareText("0 dB")
 }
 
 const size = 16
@@ -35,11 +58,10 @@ func drawVG(width, height int32) {
 
 	top, bottom := w.SplitH(size + 8)
 
-	ui.Label(top, "Trippin on a Hole in a Paper Heart", vgui.AlignLeft|vgui.AlignTop)
+	ui.Label(top, ptSong, vgui.AlignLeft|vgui.AlignTop)
 
 	// Split screen for MG v JD:
 	mg, jd := bottom.SplitV(bottom.W * 0.5)
-	amps := [...]string{"MG", "JD"}
 
 	drawAmp := func(w vgui.Window, ampNo int) {
 		ui.StrokeWidth(1.0)
@@ -78,10 +100,10 @@ func drawVG(width, height int32) {
 
 		gain, volume := mid.SplitV(mid.W * 0.5)
 		g := float32(96) / 127.0
-		ui.Dial(gain, "Gain", g, "0.68")
+		ui.Dial(gain, ptGain, g, ptGainStr)
 		_, _ = gain, g
 		v := float32(98) / 127.0
-		ui.Dial(volume, "Volume", v, "0 dB")
+		ui.Dial(volume, ptVolume, v, ptVolumeStr)
 		_, _ = volume, v
 	}
 	drawAmp(mg, 0)
