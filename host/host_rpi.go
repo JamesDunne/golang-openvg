@@ -10,13 +10,13 @@ import "C"
 import "fmt"
 import "unsafe"
 
-type VG struct {
-	Width  uint32
-	Height uint32
+var (
+	Width  int32
+	Height int32
 
 	display uintptr
 	surface uintptr
-}
+)
 
 type EGLerror C.EGLint
 
@@ -57,23 +57,48 @@ func (e EGLerror) Error() string {
 	}
 }
 
-func Create(width, height uint32) (*VG, error) {
-	vg := &VG{Width: width, Height: height}
+func Init(width, height int) bool {
+	w32 := uint32(0)
+	h32 := uint32(0)
 
 	if retval := C.create(
-		(*C.uint32_t)(unsafe.Pointer(&vg.Width)),
-		(*C.uint32_t)(unsafe.Pointer(&vg.Height)),
-		(*C.EGLDisplay)(unsafe.Pointer(&vg.display)),
-		(*C.EGLSurface)(unsafe.Pointer(&vg.surface)),
+		(*C.uint32_t)(unsafe.Pointer(&w32)),
+		(*C.uint32_t)(unsafe.Pointer(&h32)),
+		(*C.EGLDisplay)(unsafe.Pointer(&display)),
+		(*C.EGLSurface)(unsafe.Pointer(&surface)),
 	); retval != C.EGL_SUCCESS {
-		return nil, EGLerror(retval)
+		panic(EGLerror(retval))
 	}
 
-	return vg, nil
+	// TODO: respect passed-in width,height.
+	Width = int32(w32)
+	Height = int32(h32)
+
+	if cb := InitFunc; cb != nil {
+		cb(Width, Height)
+	}
+
+	return true
 }
 
-func (vg *VG) SwapBuffers() error {
-	if retval := C.eglSwapBuffers(C.EGLDisplay(vg.display), C.EGLSurface(vg.surface)); retval != C.EGL_SUCCESS {
+func Destroy() int {
+	//return int(C.hostDestroy())
+	return 0
+}
+
+func PollEvent() bool {
+	//return int32(C.hostPollEvent()) == 0
+
+	if cb := DrawFunc; cb != nil {
+		cb(Width, Height)
+	}
+	SwapBuffers()
+
+	return true
+}
+
+func SwapBuffers() error {
+	if retval := C.eglSwapBuffers(C.EGLDisplay(display), C.EGLSurface(surface)); retval != C.EGL_SUCCESS {
 		return EGLerror(retval)
 	}
 	return nil

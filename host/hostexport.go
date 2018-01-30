@@ -3,6 +3,7 @@ package host
 /*
 #cgo darwin CFLAGS: -x objective-c -Iinclude
 #cgo windows CFLAGS: -Iinclude
+#cgo rpi CFLAGS: -Iinclude
 #include "app.h"
 */
 import "C"
