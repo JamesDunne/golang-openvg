@@ -1,6 +1,5 @@
 package vgu
 
-//#cgo LDFLAGS: -lAmanithVG
 //#include "VG/vgu.h"
 import "C"
 

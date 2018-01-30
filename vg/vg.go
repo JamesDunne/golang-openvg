@@ -1,413 +1,437 @@
 package vg
 
-//#cgo LDFLAGS: -lAmanithVG
 //#include "VG/openvg.h"
 import "C"
 
 import "unsafe"
 
 type BooleanEnum int32
+
 const (
-	False BooleanEnum = 0
-	True BooleanEnum = 1
+	False            BooleanEnum = 0
+	True             BooleanEnum = 1
 	BooleanForceSize BooleanEnum = 2147483647
 )
 
 type ErrorCodeEnum int32
+
 const (
-	NoError ErrorCodeEnum = 0
-	BadHandleError ErrorCodeEnum = 4096
-	IllegalArgumentError ErrorCodeEnum = 4097
-	OutOfMemoryError ErrorCodeEnum = 4098
-	PathCapabilityError ErrorCodeEnum = 4099
+	NoError                     ErrorCodeEnum = 0
+	BadHandleError              ErrorCodeEnum = 4096
+	IllegalArgumentError        ErrorCodeEnum = 4097
+	OutOfMemoryError            ErrorCodeEnum = 4098
+	PathCapabilityError         ErrorCodeEnum = 4099
 	UnsupportedImageFormatError ErrorCodeEnum = 4100
-	UnsupportedPathFormatError ErrorCodeEnum = 4101
-	ImageInUseError ErrorCodeEnum = 4102
-	NoContextError ErrorCodeEnum = 4103
-	ErrorCodeForceSize ErrorCodeEnum = 2147483647
+	UnsupportedPathFormatError  ErrorCodeEnum = 4101
+	ImageInUseError             ErrorCodeEnum = 4102
+	NoContextError              ErrorCodeEnum = 4103
+	ErrorCodeForceSize          ErrorCodeEnum = 2147483647
 )
 
 type ParamTypeEnum int32
+
 const (
-	MatrixMode ParamTypeEnum = 4352
-	FillRule ParamTypeEnum = 4353
-	ImageQuality ParamTypeEnum = 4354
-	RenderingQuality ParamTypeEnum = 4355
-	BlendMode ParamTypeEnum = 4356
-	ImageMode ParamTypeEnum = 4357
-	ScissorRects ParamTypeEnum = 4358
-	ColorTransform ParamTypeEnum = 4464
-	ColorTransformValues ParamTypeEnum = 4465
-	StrokeLineWidth ParamTypeEnum = 4368
-	StrokeCapStyle ParamTypeEnum = 4369
-	StrokeJoinStyle ParamTypeEnum = 4370
-	StrokeMiterLimit ParamTypeEnum = 4371
-	StrokeDashPattern ParamTypeEnum = 4372
-	StrokeDashPhase ParamTypeEnum = 4373
-	StrokeDashPhaseReset ParamTypeEnum = 4374
-	TileFillColor ParamTypeEnum = 4384
-	ClearColor ParamTypeEnum = 4385
-	GlyphOrigin ParamTypeEnum = 4386
-	Masking ParamTypeEnum = 4400
-	Scissoring ParamTypeEnum = 4401
-	PixelLayout ParamTypeEnum = 4416
-	ScreenLayout ParamTypeEnum = 4417
-	FilterFormatLinear ParamTypeEnum = 4432
+	MatrixMode                ParamTypeEnum = 4352
+	FillRule                  ParamTypeEnum = 4353
+	ImageQuality              ParamTypeEnum = 4354
+	RenderingQuality          ParamTypeEnum = 4355
+	BlendMode                 ParamTypeEnum = 4356
+	ImageMode                 ParamTypeEnum = 4357
+	ScissorRects              ParamTypeEnum = 4358
+	ColorTransform            ParamTypeEnum = 4464
+	ColorTransformValues      ParamTypeEnum = 4465
+	StrokeLineWidth           ParamTypeEnum = 4368
+	StrokeCapStyle            ParamTypeEnum = 4369
+	StrokeJoinStyle           ParamTypeEnum = 4370
+	StrokeMiterLimit          ParamTypeEnum = 4371
+	StrokeDashPattern         ParamTypeEnum = 4372
+	StrokeDashPhase           ParamTypeEnum = 4373
+	StrokeDashPhaseReset      ParamTypeEnum = 4374
+	TileFillColor             ParamTypeEnum = 4384
+	ClearColor                ParamTypeEnum = 4385
+	GlyphOrigin               ParamTypeEnum = 4386
+	Masking                   ParamTypeEnum = 4400
+	Scissoring                ParamTypeEnum = 4401
+	PixelLayout               ParamTypeEnum = 4416
+	ScreenLayout              ParamTypeEnum = 4417
+	FilterFormatLinear        ParamTypeEnum = 4432
 	FilterFormatPremultiplied ParamTypeEnum = 4433
-	FilterChannelMask ParamTypeEnum = 4434
-	MaxScissorRects ParamTypeEnum = 4448
-	MaxDashCount ParamTypeEnum = 4449
-	MaxKernelSize ParamTypeEnum = 4450
-	MaxSeparableKernelSize ParamTypeEnum = 4451
-	MaxColorRampStops ParamTypeEnum = 4452
-	MaxImageWidth ParamTypeEnum = 4453
-	MaxImageHeight ParamTypeEnum = 4454
-	MaxImagePixels ParamTypeEnum = 4455
-	MaxImageBytes ParamTypeEnum = 4456
-	MaxFloat ParamTypeEnum = 4457
-	MaxGaussianStdDeviation ParamTypeEnum = 4458
-	ParamTypeForceSize ParamTypeEnum = 2147483647
+	FilterChannelMask         ParamTypeEnum = 4434
+	MaxScissorRects           ParamTypeEnum = 4448
+	MaxDashCount              ParamTypeEnum = 4449
+	MaxKernelSize             ParamTypeEnum = 4450
+	MaxSeparableKernelSize    ParamTypeEnum = 4451
+	MaxColorRampStops         ParamTypeEnum = 4452
+	MaxImageWidth             ParamTypeEnum = 4453
+	MaxImageHeight            ParamTypeEnum = 4454
+	MaxImagePixels            ParamTypeEnum = 4455
+	MaxImageBytes             ParamTypeEnum = 4456
+	MaxFloat                  ParamTypeEnum = 4457
+	MaxGaussianStdDeviation   ParamTypeEnum = 4458
+	ParamTypeForceSize        ParamTypeEnum = 2147483647
 )
 
 type RenderingQualityEnum int32
+
 const (
 	RenderingQualityNonantialiased RenderingQualityEnum = 4608
-	RenderingQualityFaster RenderingQualityEnum = 4609
-	RenderingQualityBetter RenderingQualityEnum = 4610
-	RenderingQualityForceSize RenderingQualityEnum = 2147483647
+	RenderingQualityFaster         RenderingQualityEnum = 4609
+	RenderingQualityBetter         RenderingQualityEnum = 4610
+	RenderingQualityForceSize      RenderingQualityEnum = 2147483647
 )
 
 type PixelLayoutEnum int32
+
 const (
-	PixelLayoutUnknown PixelLayoutEnum = 4864
-	PixelLayoutRgbVertical PixelLayoutEnum = 4865
-	PixelLayoutBgrVertical PixelLayoutEnum = 4866
+	PixelLayoutUnknown       PixelLayoutEnum = 4864
+	PixelLayoutRgbVertical   PixelLayoutEnum = 4865
+	PixelLayoutBgrVertical   PixelLayoutEnum = 4866
 	PixelLayoutRgbHorizontal PixelLayoutEnum = 4867
 	PixelLayoutBgrHorizontal PixelLayoutEnum = 4868
-	PixelLayoutForceSize PixelLayoutEnum = 2147483647
+	PixelLayoutForceSize     PixelLayoutEnum = 2147483647
 )
 
 type MatrixModeEnum int32
+
 const (
-	MatrixPathUserToSurface MatrixModeEnum = 5120
+	MatrixPathUserToSurface  MatrixModeEnum = 5120
 	MatrixImageUserToSurface MatrixModeEnum = 5121
-	MatrixFillPaintToUser MatrixModeEnum = 5122
-	MatrixStrokePaintToUser MatrixModeEnum = 5123
+	MatrixFillPaintToUser    MatrixModeEnum = 5122
+	MatrixStrokePaintToUser  MatrixModeEnum = 5123
 	MatrixGlyphUserToSurface MatrixModeEnum = 5124
-	MatrixModeForceSize MatrixModeEnum = 2147483647
+	MatrixModeForceSize      MatrixModeEnum = 2147483647
 )
 
 type MaskOperationEnum int32
+
 const (
-	ClearMask MaskOperationEnum = 5376
-	FillMask MaskOperationEnum = 5377
-	SetMask MaskOperationEnum = 5378
-	UnionMask MaskOperationEnum = 5379
-	IntersectMask MaskOperationEnum = 5380
-	SubtractMask MaskOperationEnum = 5381
+	ClearMask              MaskOperationEnum = 5376
+	FillMask               MaskOperationEnum = 5377
+	SetMask                MaskOperationEnum = 5378
+	UnionMask              MaskOperationEnum = 5379
+	IntersectMask          MaskOperationEnum = 5380
+	SubtractMask           MaskOperationEnum = 5381
 	MaskOperationForceSize MaskOperationEnum = 2147483647
 )
 
 type PathDatatypeEnum int32
+
 const (
-	PathDatatypeS8 PathDatatypeEnum = 0
-	PathDatatypeS16 PathDatatypeEnum = 1
-	PathDatatypeS32 PathDatatypeEnum = 2
-	PathDatatypeF PathDatatypeEnum = 3
+	PathDatatypeS8        PathDatatypeEnum = 0
+	PathDatatypeS16       PathDatatypeEnum = 1
+	PathDatatypeS32       PathDatatypeEnum = 2
+	PathDatatypeF         PathDatatypeEnum = 3
 	PathDatatypeForceSize PathDatatypeEnum = 2147483647
 )
 
 type PathAbsRelEnum int32
+
 const (
-	Absolute PathAbsRelEnum = 0
-	Relative PathAbsRelEnum = 1
+	Absolute            PathAbsRelEnum = 0
+	Relative            PathAbsRelEnum = 1
 	PathAbsRelForceSize PathAbsRelEnum = 2147483647
 )
 
 type PathSegmentEnum int32
+
 const (
-	ClosePath PathSegmentEnum = 0
-	MoveTo PathSegmentEnum = 2
-	LineTo PathSegmentEnum = 4
-	HlineTo PathSegmentEnum = 6
-	VlineTo PathSegmentEnum = 8
-	QuadTo PathSegmentEnum = 10
-	CubicTo PathSegmentEnum = 12
-	SquadTo PathSegmentEnum = 14
-	ScubicTo PathSegmentEnum = 16
-	SccwarcTo PathSegmentEnum = 18
-	ScwarcTo PathSegmentEnum = 20
-	LccwarcTo PathSegmentEnum = 22
-	LcwarcTo PathSegmentEnum = 24
+	ClosePath            PathSegmentEnum = 0
+	MoveTo               PathSegmentEnum = 2
+	LineTo               PathSegmentEnum = 4
+	HlineTo              PathSegmentEnum = 6
+	VlineTo              PathSegmentEnum = 8
+	QuadTo               PathSegmentEnum = 10
+	CubicTo              PathSegmentEnum = 12
+	SquadTo              PathSegmentEnum = 14
+	ScubicTo             PathSegmentEnum = 16
+	SccwarcTo            PathSegmentEnum = 18
+	ScwarcTo             PathSegmentEnum = 20
+	LccwarcTo            PathSegmentEnum = 22
+	LcwarcTo             PathSegmentEnum = 24
 	PathSegmentForceSize PathSegmentEnum = 2147483647
 )
 
 type PathCommandEnum int32
+
 const (
-	MoveToAbs PathCommandEnum = 2
-	MoveToRel PathCommandEnum = 3
-	LineToAbs PathCommandEnum = 4
-	LineToRel PathCommandEnum = 5
-	HlineToAbs PathCommandEnum = 6
-	HlineToRel PathCommandEnum = 7
-	VlineToAbs PathCommandEnum = 8
-	VlineToRel PathCommandEnum = 9
-	QuadToAbs PathCommandEnum = 10
-	QuadToRel PathCommandEnum = 11
-	CubicToAbs PathCommandEnum = 12
-	CubicToRel PathCommandEnum = 13
-	SquadToAbs PathCommandEnum = 14
-	SquadToRel PathCommandEnum = 15
-	ScubicToAbs PathCommandEnum = 16
-	ScubicToRel PathCommandEnum = 17
-	SccwarcToAbs PathCommandEnum = 18
-	SccwarcToRel PathCommandEnum = 19
-	ScwarcToAbs PathCommandEnum = 20
-	ScwarcToRel PathCommandEnum = 21
-	LccwarcToAbs PathCommandEnum = 22
-	LccwarcToRel PathCommandEnum = 23
-	LcwarcToAbs PathCommandEnum = 24
-	LcwarcToRel PathCommandEnum = 25
+	MoveToAbs            PathCommandEnum = 2
+	MoveToRel            PathCommandEnum = 3
+	LineToAbs            PathCommandEnum = 4
+	LineToRel            PathCommandEnum = 5
+	HlineToAbs           PathCommandEnum = 6
+	HlineToRel           PathCommandEnum = 7
+	VlineToAbs           PathCommandEnum = 8
+	VlineToRel           PathCommandEnum = 9
+	QuadToAbs            PathCommandEnum = 10
+	QuadToRel            PathCommandEnum = 11
+	CubicToAbs           PathCommandEnum = 12
+	CubicToRel           PathCommandEnum = 13
+	SquadToAbs           PathCommandEnum = 14
+	SquadToRel           PathCommandEnum = 15
+	ScubicToAbs          PathCommandEnum = 16
+	ScubicToRel          PathCommandEnum = 17
+	SccwarcToAbs         PathCommandEnum = 18
+	SccwarcToRel         PathCommandEnum = 19
+	ScwarcToAbs          PathCommandEnum = 20
+	ScwarcToRel          PathCommandEnum = 21
+	LccwarcToAbs         PathCommandEnum = 22
+	LccwarcToRel         PathCommandEnum = 23
+	LcwarcToAbs          PathCommandEnum = 24
+	LcwarcToRel          PathCommandEnum = 25
 	PathCommandForceSize PathCommandEnum = 2147483647
 )
 
 type PathCapabilitiesEnum int32
+
 const (
-	PathCapabilityAppendFrom PathCapabilitiesEnum = 1
-	PathCapabilityAppendTo PathCapabilitiesEnum = 2
-	PathCapabilityModify PathCapabilitiesEnum = 4
-	PathCapabilityTransformFrom PathCapabilitiesEnum = 8
-	PathCapabilityTransformTo PathCapabilitiesEnum = 16
-	PathCapabilityInterpolateFrom PathCapabilitiesEnum = 32
-	PathCapabilityInterpolateTo PathCapabilitiesEnum = 64
-	PathCapabilityPathLength PathCapabilitiesEnum = 128
-	PathCapabilityPointAlongPath PathCapabilitiesEnum = 256
-	PathCapabilityTangentAlongPath PathCapabilitiesEnum = 512
-	PathCapabilityPathBounds PathCapabilitiesEnum = 1024
+	PathCapabilityAppendFrom            PathCapabilitiesEnum = 1
+	PathCapabilityAppendTo              PathCapabilitiesEnum = 2
+	PathCapabilityModify                PathCapabilitiesEnum = 4
+	PathCapabilityTransformFrom         PathCapabilitiesEnum = 8
+	PathCapabilityTransformTo           PathCapabilitiesEnum = 16
+	PathCapabilityInterpolateFrom       PathCapabilitiesEnum = 32
+	PathCapabilityInterpolateTo         PathCapabilitiesEnum = 64
+	PathCapabilityPathLength            PathCapabilitiesEnum = 128
+	PathCapabilityPointAlongPath        PathCapabilitiesEnum = 256
+	PathCapabilityTangentAlongPath      PathCapabilitiesEnum = 512
+	PathCapabilityPathBounds            PathCapabilitiesEnum = 1024
 	PathCapabilityPathTransformedBounds PathCapabilitiesEnum = 2048
-	PathCapabilityAll PathCapabilitiesEnum = 4095
-	PathCapabilitiesForceSize PathCapabilitiesEnum = 2147483647
+	PathCapabilityAll                   PathCapabilitiesEnum = 4095
+	PathCapabilitiesForceSize           PathCapabilitiesEnum = 2147483647
 )
 
 type PathParamTypeEnum int32
+
 const (
-	PathFormat PathParamTypeEnum = 5632
-	PathDatatype PathParamTypeEnum = 5633
-	PathScale PathParamTypeEnum = 5634
-	PathBias PathParamTypeEnum = 5635
-	PathNumSegments PathParamTypeEnum = 5636
-	PathNumCoords PathParamTypeEnum = 5637
+	PathFormat             PathParamTypeEnum = 5632
+	PathDatatype           PathParamTypeEnum = 5633
+	PathScale              PathParamTypeEnum = 5634
+	PathBias               PathParamTypeEnum = 5635
+	PathNumSegments        PathParamTypeEnum = 5636
+	PathNumCoords          PathParamTypeEnum = 5637
 	PathParamTypeForceSize PathParamTypeEnum = 2147483647
 )
 
 type CapStyleEnum int32
+
 const (
-	CapButt CapStyleEnum = 5888
-	CapRound CapStyleEnum = 5889
-	CapSquare CapStyleEnum = 5890
+	CapButt           CapStyleEnum = 5888
+	CapRound          CapStyleEnum = 5889
+	CapSquare         CapStyleEnum = 5890
 	CapStyleForceSize CapStyleEnum = 2147483647
 )
 
 type JoinStyleEnum int32
+
 const (
-	JoinMiter JoinStyleEnum = 6144
-	JoinRound JoinStyleEnum = 6145
-	JoinBevel JoinStyleEnum = 6146
+	JoinMiter          JoinStyleEnum = 6144
+	JoinRound          JoinStyleEnum = 6145
+	JoinBevel          JoinStyleEnum = 6146
 	JoinStyleForceSize JoinStyleEnum = 2147483647
 )
 
 type FillRuleEnum int32
+
 const (
-	EvenOdd FillRuleEnum = 6400
-	NonZero FillRuleEnum = 6401
+	EvenOdd           FillRuleEnum = 6400
+	NonZero           FillRuleEnum = 6401
 	FillRuleForceSize FillRuleEnum = 2147483647
 )
 
 type PaintModeEnum int32
+
 const (
-	StrokePath PaintModeEnum = 1
-	FillPath PaintModeEnum = 2
+	StrokePath         PaintModeEnum = 1
+	FillPath           PaintModeEnum = 2
 	PaintModeForceSize PaintModeEnum = 2147483647
 )
 
 type PaintParamTypeEnum int32
+
 const (
-	PaintType PaintParamTypeEnum = 6656
-	PaintColor PaintParamTypeEnum = 6657
-	PaintColorRampSpreadMode PaintParamTypeEnum = 6658
+	PaintType                   PaintParamTypeEnum = 6656
+	PaintColor                  PaintParamTypeEnum = 6657
+	PaintColorRampSpreadMode    PaintParamTypeEnum = 6658
 	PaintColorRampPremultiplied PaintParamTypeEnum = 6663
-	PaintColorRampStops PaintParamTypeEnum = 6659
-	PaintLinearGradient PaintParamTypeEnum = 6660
-	PaintRadialGradient PaintParamTypeEnum = 6661
-	PaintPatternTilingMode PaintParamTypeEnum = 6662
-	PaintParamTypeForceSize PaintParamTypeEnum = 2147483647
+	PaintColorRampStops         PaintParamTypeEnum = 6659
+	PaintLinearGradient         PaintParamTypeEnum = 6660
+	PaintRadialGradient         PaintParamTypeEnum = 6661
+	PaintPatternTilingMode      PaintParamTypeEnum = 6662
+	PaintParamTypeForceSize     PaintParamTypeEnum = 2147483647
 )
 
 type PaintTypeEnum int32
+
 const (
-	PaintTypeColor PaintTypeEnum = 6912
+	PaintTypeColor          PaintTypeEnum = 6912
 	PaintTypeLinearGradient PaintTypeEnum = 6913
 	PaintTypeRadialGradient PaintTypeEnum = 6914
-	PaintTypePattern PaintTypeEnum = 6915
-	PaintTypeForceSize PaintTypeEnum = 2147483647
+	PaintTypePattern        PaintTypeEnum = 6915
+	PaintTypeForceSize      PaintTypeEnum = 2147483647
 )
 
 type ColorRampSpreadModeEnum int32
+
 const (
-	ColorRampSpreadPad ColorRampSpreadModeEnum = 7168
-	ColorRampSpreadRepeat ColorRampSpreadModeEnum = 7169
-	ColorRampSpreadReflect ColorRampSpreadModeEnum = 7170
+	ColorRampSpreadPad           ColorRampSpreadModeEnum = 7168
+	ColorRampSpreadRepeat        ColorRampSpreadModeEnum = 7169
+	ColorRampSpreadReflect       ColorRampSpreadModeEnum = 7170
 	ColorRampSpreadModeForceSize ColorRampSpreadModeEnum = 2147483647
 )
 
 type TilingModeEnum int32
+
 const (
-	TileFill TilingModeEnum = 7424
-	TilePad TilingModeEnum = 7425
-	TileRepeat TilingModeEnum = 7426
-	TileReflect TilingModeEnum = 7427
+	TileFill            TilingModeEnum = 7424
+	TilePad             TilingModeEnum = 7425
+	TileRepeat          TilingModeEnum = 7426
+	TileReflect         TilingModeEnum = 7427
 	TilingModeForceSize TilingModeEnum = 2147483647
 )
 
 type ImageFormatEnum int32
+
 const (
-	Srgbx8888 ImageFormatEnum = 0
-	Srgba8888 ImageFormatEnum = 1
-	Srgba8888Pre ImageFormatEnum = 2
-	Srgb565 ImageFormatEnum = 3
-	Srgba5551 ImageFormatEnum = 4
-	Srgba4444 ImageFormatEnum = 5
-	Sl8 ImageFormatEnum = 6
-	Lrgbx8888 ImageFormatEnum = 7
-	Lrgba8888 ImageFormatEnum = 8
-	Lrgba8888Pre ImageFormatEnum = 9
-	Ll8 ImageFormatEnum = 10
-	A8 ImageFormatEnum = 11
-	Bw1 ImageFormatEnum = 12
-	A1 ImageFormatEnum = 13
-	A4 ImageFormatEnum = 14
-	Sxrgb8888 ImageFormatEnum = 64
-	Sargb8888 ImageFormatEnum = 65
-	Sargb8888Pre ImageFormatEnum = 66
-	Sargb1555 ImageFormatEnum = 68
-	Sargb4444 ImageFormatEnum = 69
-	Lxrgb8888 ImageFormatEnum = 71
-	Largb8888 ImageFormatEnum = 72
-	Largb8888Pre ImageFormatEnum = 73
-	Sbgrx8888 ImageFormatEnum = 128
-	Sbgra8888 ImageFormatEnum = 129
-	Sbgra8888Pre ImageFormatEnum = 130
-	Sbgr565 ImageFormatEnum = 131
-	Sbgra5551 ImageFormatEnum = 132
-	Sbgra4444 ImageFormatEnum = 133
-	Lbgrx8888 ImageFormatEnum = 135
-	Lbgra8888 ImageFormatEnum = 136
-	Lbgra8888Pre ImageFormatEnum = 137
-	Sxbgr8888 ImageFormatEnum = 192
-	Sabgr8888 ImageFormatEnum = 193
-	Sabgr8888Pre ImageFormatEnum = 194
-	Sabgr1555 ImageFormatEnum = 196
-	Sabgr4444 ImageFormatEnum = 197
-	Lxbgr8888 ImageFormatEnum = 199
-	Labgr8888 ImageFormatEnum = 200
-	Labgr8888Pre ImageFormatEnum = 201
+	Srgbx8888            ImageFormatEnum = 0
+	Srgba8888            ImageFormatEnum = 1
+	Srgba8888Pre         ImageFormatEnum = 2
+	Srgb565              ImageFormatEnum = 3
+	Srgba5551            ImageFormatEnum = 4
+	Srgba4444            ImageFormatEnum = 5
+	Sl8                  ImageFormatEnum = 6
+	Lrgbx8888            ImageFormatEnum = 7
+	Lrgba8888            ImageFormatEnum = 8
+	Lrgba8888Pre         ImageFormatEnum = 9
+	Ll8                  ImageFormatEnum = 10
+	A8                   ImageFormatEnum = 11
+	Bw1                  ImageFormatEnum = 12
+	A1                   ImageFormatEnum = 13
+	A4                   ImageFormatEnum = 14
+	Sxrgb8888            ImageFormatEnum = 64
+	Sargb8888            ImageFormatEnum = 65
+	Sargb8888Pre         ImageFormatEnum = 66
+	Sargb1555            ImageFormatEnum = 68
+	Sargb4444            ImageFormatEnum = 69
+	Lxrgb8888            ImageFormatEnum = 71
+	Largb8888            ImageFormatEnum = 72
+	Largb8888Pre         ImageFormatEnum = 73
+	Sbgrx8888            ImageFormatEnum = 128
+	Sbgra8888            ImageFormatEnum = 129
+	Sbgra8888Pre         ImageFormatEnum = 130
+	Sbgr565              ImageFormatEnum = 131
+	Sbgra5551            ImageFormatEnum = 132
+	Sbgra4444            ImageFormatEnum = 133
+	Lbgrx8888            ImageFormatEnum = 135
+	Lbgra8888            ImageFormatEnum = 136
+	Lbgra8888Pre         ImageFormatEnum = 137
+	Sxbgr8888            ImageFormatEnum = 192
+	Sabgr8888            ImageFormatEnum = 193
+	Sabgr8888Pre         ImageFormatEnum = 194
+	Sabgr1555            ImageFormatEnum = 196
+	Sabgr4444            ImageFormatEnum = 197
+	Lxbgr8888            ImageFormatEnum = 199
+	Labgr8888            ImageFormatEnum = 200
+	Labgr8888Pre         ImageFormatEnum = 201
 	ImageFormatForceSize ImageFormatEnum = 2147483647
 )
 
 type ImageQualityEnum int32
+
 const (
 	ImageQualityNonantialiased ImageQualityEnum = 1
-	ImageQualityFaster ImageQualityEnum = 2
-	ImageQualityBetter ImageQualityEnum = 4
-	ImageQualityForceSize ImageQualityEnum = 2147483647
+	ImageQualityFaster         ImageQualityEnum = 2
+	ImageQualityBetter         ImageQualityEnum = 4
+	ImageQualityForceSize      ImageQualityEnum = 2147483647
 )
 
 type ImageParamTypeEnum int32
+
 const (
-	ImageFormat ImageParamTypeEnum = 7680
-	ImageWidth ImageParamTypeEnum = 7681
-	ImageHeight ImageParamTypeEnum = 7682
+	ImageFormat             ImageParamTypeEnum = 7680
+	ImageWidth              ImageParamTypeEnum = 7681
+	ImageHeight             ImageParamTypeEnum = 7682
 	ImageParamTypeForceSize ImageParamTypeEnum = 2147483647
 )
 
 type ImageModeEnum int32
+
 const (
-	DrawImageNormal ImageModeEnum = 7936
-	DrawImageMultiply ImageModeEnum = 7937
-	DrawImageStencil ImageModeEnum = 7938
+	DrawImageNormal    ImageModeEnum = 7936
+	DrawImageMultiply  ImageModeEnum = 7937
+	DrawImageStencil   ImageModeEnum = 7938
 	ImageModeForceSize ImageModeEnum = 2147483647
 )
 
 type ImageChannelEnum int32
+
 const (
-	Red ImageChannelEnum = 8
-	Green ImageChannelEnum = 4
-	Blue ImageChannelEnum = 2
-	Alpha ImageChannelEnum = 1
+	Red                   ImageChannelEnum = 8
+	Green                 ImageChannelEnum = 4
+	Blue                  ImageChannelEnum = 2
+	Alpha                 ImageChannelEnum = 1
 	ImageChannelForceSize ImageChannelEnum = 2147483647
 )
 
 type BlendModeEnum int32
+
 const (
-	BlendSrc BlendModeEnum = 8192
-	BlendSrcOver BlendModeEnum = 8193
-	BlendDstOver BlendModeEnum = 8194
-	BlendSrcIn BlendModeEnum = 8195
-	BlendDstIn BlendModeEnum = 8196
-	BlendMultiply BlendModeEnum = 8197
-	BlendScreen BlendModeEnum = 8198
-	BlendDarken BlendModeEnum = 8199
-	BlendLighten BlendModeEnum = 8200
-	BlendAdditive BlendModeEnum = 8201
+	BlendSrc           BlendModeEnum = 8192
+	BlendSrcOver       BlendModeEnum = 8193
+	BlendDstOver       BlendModeEnum = 8194
+	BlendSrcIn         BlendModeEnum = 8195
+	BlendDstIn         BlendModeEnum = 8196
+	BlendMultiply      BlendModeEnum = 8197
+	BlendScreen        BlendModeEnum = 8198
+	BlendDarken        BlendModeEnum = 8199
+	BlendLighten       BlendModeEnum = 8200
+	BlendAdditive      BlendModeEnum = 8201
 	BlendModeForceSize BlendModeEnum = 2147483647
 )
 
 type FontParamTypeEnum int32
+
 const (
-	FontNumGlyphs FontParamTypeEnum = 12032
+	FontNumGlyphs          FontParamTypeEnum = 12032
 	FontParamTypeForceSize FontParamTypeEnum = 2147483647
 )
 
 type HardwareQueryTypeEnum int32
+
 const (
-	ImageFormatQuery HardwareQueryTypeEnum = 8448
-	PathDatatypeQuery HardwareQueryTypeEnum = 8449
+	ImageFormatQuery           HardwareQueryTypeEnum = 8448
+	PathDatatypeQuery          HardwareQueryTypeEnum = 8449
 	HardwareQueryTypeForceSize HardwareQueryTypeEnum = 2147483647
 )
 
 type HardwareQueryResultEnum int32
+
 const (
-	HardwareAccelerated HardwareQueryResultEnum = 8704
-	HardwareUnaccelerated HardwareQueryResultEnum = 8705
+	HardwareAccelerated          HardwareQueryResultEnum = 8704
+	HardwareUnaccelerated        HardwareQueryResultEnum = 8705
 	HardwareQueryResultForceSize HardwareQueryResultEnum = 2147483647
 )
 
 type StringIDEnum int32
+
 const (
-	Vendor StringIDEnum = 8960
-	Renderer StringIDEnum = 8961
-	Version StringIDEnum = 8962
-	Extensions StringIDEnum = 8963
+	Vendor            StringIDEnum = 8960
+	Renderer          StringIDEnum = 8961
+	Version           StringIDEnum = 8962
+	Extensions        StringIDEnum = 8963
 	StringIdForceSize StringIDEnum = 2147483647
 )
 
-func GetError(
-) ErrorCodeEnum {
-	ret := C.vgGetError(
-	)
+func GetError() ErrorCodeEnum {
+	ret := C.vgGetError()
 	return (ErrorCodeEnum)(ret)
 }
 
-func Flush(
-) {
-	C.vgFlush(
-	)
+func Flush() {
+	C.vgFlush()
 }
 
-func Finish(
-) {
-	C.vgFinish(
-	)
+func Finish() {
+	C.vgFinish()
 }
 
 func Setf(
@@ -618,10 +642,8 @@ func GetParameteriv(
 	)
 }
 
-func LoadIdentity(
-) {
-	C.vgLoadIdentity(
-	)
+func LoadIdentity() {
+	C.vgLoadIdentity()
 }
 
 func LoadMatrix(
@@ -985,10 +1007,8 @@ func DrawPath(
 	)
 }
 
-func CreatePaint(
-) uint32 {
-	ret := C.vgCreatePaint(
-	)
+func CreatePaint() uint32 {
+	ret := C.vgCreatePaint()
 	return (uint32)(ret)
 }
 
