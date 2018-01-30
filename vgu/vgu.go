@@ -1,5 +1,7 @@
 package vgu
 
+//#cgo darwin LDFLAGS: -L../host/lib/macosx/ub/gle/standalone -lAmanithVG
+//#cgo windows LDFLAGS: -L../host/lib/win/x86_64/gle/standalone -lAmanithVG
 //#include "VG/vgu.h"
 import "C"
 

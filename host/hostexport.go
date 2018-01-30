@@ -1,11 +1,8 @@
-//+build darwin
-
 package host
 
 /*
-#cgo CFLAGS: -x objective-c -Iinclude
-#cgo LDFLAGS: -framework Cocoa -framework OpenGL -framework QuartzCore -Llib/macosx/ub/gle/standalone -lAmanithVG
-
+#cgo darwin CFLAGS: -x objective-c -Iinclude
+#cgo windows CFLAGS: -Iinclude
 #include "app.h"
 */
 import "C"

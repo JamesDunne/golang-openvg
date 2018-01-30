@@ -48,7 +48,7 @@ func drawVG(width, height int32) {
 
 	vg.LoadIdentity()
 	vg.Translate(100, 150)
-	host.Text("HELLO world", f)
+	//host.Text("HELLO world", f)
 }
 
 func main() {
@@ -59,9 +59,13 @@ func main() {
 	host.DrawFunc = drawVG
 
 	// Initialize the host to display OpenVG graphics at 800x480 resolution:
-	host.Init(800, 480)
+	if !host.Init(800, 480) {
+		return
+	}
 
 	// Event polling with idle loop:
 	for host.PollEvent() {
 	}
+
+	host.Destroy()
 }

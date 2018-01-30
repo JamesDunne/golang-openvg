@@ -20,11 +20,18 @@ var (
 	view uintptr
 )
 
-func Init(width, height int) {
-	C.hostInit(C.int(width), C.int(height), unsafe.Pointer(&app), unsafe.Pointer(&view))
+func Init(width, height int) bool {
+	if C.hostInit(C.int(width), C.int(height), unsafe.Pointer(&app), unsafe.Pointer(&view)) == 0 {
+		return false
+	}
 
 	Width = width
 	Height = height
+	return true
+}
+
+func Destroy() {
+
 }
 
 func PollEvent() bool {

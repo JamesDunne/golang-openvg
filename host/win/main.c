@@ -608,20 +608,18 @@ static void windowBuffersSwap(void) {
 //    return closeApp;
 //}
 
-int vgMain(int width, int height) {
+MSG msg;
 
-    MSG msg;
-    VGboolean done = VG_FALSE;
-
+VGboolean hostInit(int width, int height) {
     // create window
     if (!windowCreate(WINDOW_TITLE, width, height)) {
-        return 0;
+        return VG_FALSE;
     }
 
     // init OpenVG
     if (!openvgInit(width, height)) {
         windowDestroy();
-        return 0;
+        return VG_FALSE;
     }
 
     // init application
@@ -636,27 +634,32 @@ int vgMain(int width, int height) {
     time0 = getTimeMS();
     framesCounter = 0;
 
-    // enter main loop
-    while (!done) {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-            if (msg.message == WM_QUIT) {
-                done = VG_TRUE;
-            } else {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
+	return VG_TRUE;
+}
+
+VGboolean hostPollEvent() {
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        if (msg.message == WM_QUIT) {
+            return VG_TRUE;
         } else {
-            // update window title (show FPS)
-            windowTitleUpdate();
-            // draw the scene
-            appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
-            // advance the frames counter
-            framesCounter++;
-            // present the scene on screen
-            windowBuffersSwap();
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
+    } else {
+        // update window title (show FPS)
+        windowTitleUpdate();
+        // draw the scene
+        appDraw(openvgSurfaceWidthGet(), openvgSurfaceHeightGet());
+        // advance the frames counter
+        framesCounter++;
+        // present the scene on screen
+        windowBuffersSwap();
     }
 
+	return VG_FALSE;
+}
+
+int hostDestroy(void) {
     // destroy OpenVG resources created by the tutorial
     appDestroy();
     // destroy OpenVG context and surface
