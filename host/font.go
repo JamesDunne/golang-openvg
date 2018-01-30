@@ -2,6 +2,7 @@
 package host
 
 import (
+	"unicode/utf8"
 	"unsafe"
 
 	"github.com/JamesDunne/golang-openvg/vg"
@@ -76,31 +77,31 @@ func Text(s string, f *Font) {
 	size := float32(14.0)
 	x := float32(0)
 	y := float32(0)
-	xx := x
+
+	mm := vg.Geti(vg.MatrixMode)
 
 	vg.Seti(vg.MatrixMode, int32(vg.MatrixGlyphUserToSurface))
 	vg.Seti(vg.FillRule, int32(vg.NonZero))
 
-	for _, character := range s {
+	runes := make([]uint32, utf8.RuneCountInString(s))
+	adjustX := make([]float32, len(runes))
+	adjustY := make([]float32, len(runes))
+	for i, character := range s {
 		glyph := f.characterMap[character]
 		if glyph == -1 {
 			continue
 		}
-
-		escapement := f.glyphAdvances[glyph]
-
-		vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
-		vg.LoadIdentity()
-		vg.Translate(xx, y)
-		vg.Scale(size, size)
-		vg.DrawGlyph(f.vgHandle, uint32(glyph), uint32(vg.FillPath), vg.False)
-
-		if vg.GetError() != vg.NoError {
-			panic("VG error!")
-		}
-
-		xx += size * escapement
+		runes[i] = uint32(glyph)
+		// TODO: kerning
+		adjustX[i] = 0
+		adjustY[i] = 0
 	}
 
-	vg.Seti(vg.MatrixMode, int32(vg.MatrixPathUserToSurface))
+	vg.Setfv(vg.GlyphOrigin, 2, &[]float32{0, 0}[0])
+	vg.LoadIdentity()
+	vg.Translate(x, y)
+	vg.Scale(size, size)
+	vg.DrawGlyphs(f.vgHandle, int32(len(runes)), &runes[0], &adjustX[0], &adjustY[0], uint32(vg.FillPath), vg.False)
+
+	vg.Seti(vg.MatrixMode, mm)
 }
