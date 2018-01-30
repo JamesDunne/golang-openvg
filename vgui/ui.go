@@ -1,6 +1,8 @@
 package vgui
 
 import (
+	"math"
+
 	"github.com/JamesDunne/golang-openvg/vg"
 	"github.com/JamesDunne/golang-openvg/vgu"
 )
@@ -117,14 +119,12 @@ func (ui *UI) Init() {
 	vg.SetPaint(ui.strokePaint, uint32(vg.StrokePath))
 
 	clearColor := &[]float32{0.0, 0.0, 0.0, 1.0}[0]
-	//tileColor := &[]float32{0.0, 1.0, 0.0, 1.0}[0]
 
 	// set some default parameters for the OpenVG context
-	//vg.Seti(vg.FillRule, int32(vg.EvenOdd))
-	vg.Seti(vg.FillRule, int32(vg.NonZero))
+	vg.Seti(vg.FillRule, int32(vg.EvenOdd))
+	//vg.Seti(vg.FillRule, int32(vg.NonZero))
 
 	vg.Setfv(vg.ClearColor, 4, clearColor)
-	//vg.Setfv(vg.TileFillColor, 4, tileColor)
 	vg.Setf(vg.StrokeLineWidth, 0.125)
 	vg.Seti(vg.StrokeCapStyle, int32(vg.CapButt))
 	vg.Seti(vg.StrokeJoinStyle, int32(vg.JoinBevel))
@@ -192,21 +192,25 @@ func (u *UI) Stroke() {
 	vg.DrawPath(u.path, uint32(vg.StrokePath))
 }
 
+func (u *UI) y(y float32) float32 {
+	return u.w.H - y
+}
+
 func (u *UI) Rect(w Window) {
-	vgu.Rect(u.path, w.X, w.Y, w.W-1, w.H-1)
+	vgu.Rect(u.path, w.X, u.y(w.Y), w.W-1, w.H-1)
 }
 
 func (u *UI) RoundedRect(w Window, radius float32) {
-	vgu.RoundRect(u.path, w.X, w.Y, w.W-1, w.H-1, radius, radius)
+	vgu.RoundRect(u.path, w.X, u.y(w.Y+w.H), w.W-1, w.H-1, radius, radius)
 }
 
 func (u *UI) Circle(p Point, r float32) {
-	vgu.Ellipse(u.path, p.X, p.Y, r, r)
+	vgu.Ellipse(u.path, p.X, u.y(p.Y), r, r)
 }
 
 func (u *UI) TextPoint(p Point, size float32, align Alignment, string string) {
 	// TODO: alignment
-	Text(string, p.X, p.Y, size, u.font)
+	Text(string, p.X, u.y(p.Y), size, u.font)
 }
 
 func (u *UI) Text(w Window, size float32, align Alignment, string string) {
@@ -215,5 +219,5 @@ func (u *UI) Text(w Window, size float32, align Alignment, string string) {
 
 // Angles in radians, 0 is horizontal extending right.
 func (u *UI) Arc(p Point, r, a0, a1 float32) {
-	vgu.Arc(u.path, p.X, p.Y, r, r, a0, a1, vgu.ArcOpen)
+	vgu.Arc(u.path, p.X, u.y(p.Y), r, r, a0*-180/math.Pi, (a1-a0)*-180/math.Pi, vgu.ArcOpen)
 }

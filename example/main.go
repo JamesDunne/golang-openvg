@@ -18,13 +18,15 @@ func initVG(width, height int32) {
 	ui.SetWindow(vgui.NewWindow(0, 0, float32(width), float32(height)))
 }
 
-const size = 22
+const size = 16
 
 // Rendering is done on a specific OS thread managed by host:
 func drawVG(width, height int32) {
 	// Update display window:
 	ui.SetWindow(vgui.NewWindow(0, 0, float32(width), float32(height)))
 	w := ui.Window()
+
+	ui.BeginFrame()
 
 	ui.FillColor(ui.Palette(0))
 	ui.BeginPath()
@@ -77,8 +79,10 @@ func drawVG(width, height int32) {
 		gain, volume := mid.SplitV(mid.W * 0.5)
 		g := float32(96) / 127.0
 		ui.Dial(gain, "Gain", g, "0.68")
+		_, _ = gain, g
 		v := float32(98) / 127.0
 		ui.Dial(volume, "Volume", v, "0 dB")
+		_, _ = volume, v
 	}
 	drawAmp(mg, 0)
 	drawAmp(jd, 1)
