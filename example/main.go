@@ -126,6 +126,7 @@ func drawVG(width, height int32) {
 		ui.BeginPath()
 		ui.Circle(tp.Point, 15.0)
 		ui.Fill()
+		ui.EndPath()
 	}
 
 	ui.EndFrame()

@@ -39,6 +39,7 @@ func (ui *UI) Button(w Window, depressed bool, label *PreparedText) *Touch {
 	ui.BeginPath()
 	ui.RoundedRect(w, round)
 	ui.FillAndStroke()
+	ui.EndPath()
 
 	ui.FillColor(ui.Palette(c1))
 	ui.Text(w, size, AlignCenter|AlignMiddle, label)
@@ -50,6 +51,7 @@ func (ui *UI) Pane(w Window) {
 	ui.BeginPath()
 	ui.RoundedRect(w, round)
 	ui.Stroke()
+	ui.EndPath()
 }
 
 func (ui *UI) Label(w Window, t *PreparedText, align Alignment) {
@@ -58,6 +60,7 @@ func (ui *UI) Label(w Window, t *PreparedText, align Alignment) {
 	ui.StrokeColor(ui.Palette(3))
 	ui.FillColor(ui.Palette(1))
 	ui.FillAndStroke()
+	ui.EndPath()
 
 	lblText := w.Inner(pad*2, 0, pad*2, 0)
 	ui.FillColor(ui.Palette(4))
@@ -95,6 +98,7 @@ func (ui *UI) Dial(w Window, label *PreparedText, value float32, valueStr *Prepa
 	ui.Circle(c, r-arcWidth)
 	ui.FillColor(ui.Palette(2))
 	ui.Fill()
+	ui.EndPath()
 
 	// Highlighted arc:
 	ui.BeginPath()
@@ -104,6 +108,7 @@ func (ui *UI) Dial(w Window, label *PreparedText, value float32, valueStr *Prepa
 	ui.LineCap(vg.CapSquare)
 	ui.StrokeColor(ui.Palette(3))
 	ui.Stroke()
+	ui.EndPath()
 
 	ui.Restore()
 
