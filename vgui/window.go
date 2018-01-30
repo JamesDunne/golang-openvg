@@ -21,8 +21,8 @@ func (n Window) Inner(l, t, r, b float32) Window {
 }
 
 func (n Window) SplitH(t float32) (top Window, bottom Window) {
-	bottom = Window{n.X, n.Y, n.W, t - 1}
-	top = Window{n.X, n.Y + t, n.W, n.H - t}
+	top = Window{n.X, n.Y, n.W, t - 1}
+	bottom = Window{n.X, n.Y + t, n.W, n.H - t}
 	return
 }
 
