@@ -88,15 +88,16 @@ func Destroy() int {
 
 func PollEvent() bool {
 	//return int32(C.hostPollEvent()) == 0
+	return true
+}
 
+func Draw() {
 	if cb := DrawFunc; cb != nil {
 		cb(Width, Height)
 	}
 	if err := SwapBuffers(); err != nil {
 		panic(err)
 	}
-
-	return true
 }
 
 func SwapBuffers() error {
