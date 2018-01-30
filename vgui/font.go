@@ -1,5 +1,5 @@
 // font
-package host
+package vgui
 
 import (
 	"unicode/utf8"

@@ -7,12 +7,13 @@ import (
 	"github.com/JamesDunne/golang-openvg/host"
 	"github.com/JamesDunne/golang-openvg/vg"
 	"github.com/JamesDunne/golang-openvg/vgu"
+	"github.com/JamesDunne/golang-openvg/vgui"
 )
 
-var f *host.Font
+var f *vgui.Font
 
 func initVG(width, height int32) {
-	f = host.NewSansFont()
+	f = vgui.NewSansFont()
 
 	clearColor := &[]float32{0.0, 0.0, 1.0, 1.0}[0]
 	tileColor := &[]float32{0.0, 1.0, 0.0, 1.0}[0]
@@ -47,7 +48,7 @@ func drawVG(width, height int32) {
 	//	vg.DrawPath(path, uint32(vg.FillPath))
 	//	vg.DestroyPath(path)
 
-	host.Text("Tripping on a Hole in a Paper Heart", 150, 200, 20, f)
+	vgui.Text("Tripping on a Hole in a Paper Heart", 150, 200, 20, f)
 }
 
 func main() {
