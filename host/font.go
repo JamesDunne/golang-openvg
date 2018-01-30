@@ -59,6 +59,9 @@ func NewSansFont() *Font {
 					vg.PathCapabilityTransformTo|vg.PathCapabilityInterpolateFrom|
 					vg.PathCapabilityInterpolateTo),
 			)
+			if vg.GetError() != vg.NoError {
+				panic("VG error!")
+			}
 		}
 
 		// Create OpenVG font glyph:
@@ -68,6 +71,9 @@ func NewSansFont() *Font {
 		}
 
 		vg.DestroyPath(path)
+		if vg.GetError() != vg.NoError {
+			panic("VG error!")
+		}
 	}
 
 	return f
