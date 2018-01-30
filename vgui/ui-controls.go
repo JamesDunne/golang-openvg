@@ -27,7 +27,7 @@ func (ui *UI) isTouched(w Window) *Touch {
 	return nil
 }
 
-func (ui *UI) Button(w Window, depressed bool, label string) *Touch {
+func (ui *UI) Button(w Window, depressed bool, label *PreparedText) *Touch {
 	touched := ui.isTouched(w)
 	c1, c2, c3 := PaletteIndex(1), PaletteIndex(2), PaletteIndex(3)
 	if touched != nil || depressed {
@@ -42,7 +42,7 @@ func (ui *UI) Button(w Window, depressed bool, label string) *Touch {
 	ui.Fill()
 
 	ui.FillColor(ui.Palette(c1))
-	ui.Text(w, size, AlignCenter|AlignMiddle, ui.PrepareText(label))
+	ui.Text(w, size, AlignCenter|AlignMiddle, label)
 
 	return touched
 }

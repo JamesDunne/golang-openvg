@@ -12,6 +12,7 @@ var f *vgui.Font
 var ui *vgui.UI
 
 var amps [2]*vgui.PreparedText
+var fxNames [5]*vgui.PreparedText
 var (
 	ptSong      *vgui.PreparedText
 	ptAcoustic  *vgui.PreparedText
@@ -29,7 +30,10 @@ func initVG(width, height int32) {
 	ui.Init()
 	ui.SetWindow(vgui.NewWindow(0, 0, float32(width), float32(height)))
 
-	amps = [2]*vgui.PreparedText{ui.PrepareText("MG"), ui.PrepareText("JD")}
+	amps = [2]*vgui.PreparedText{
+		ui.PrepareText("MG"),
+		ui.PrepareText("JD"),
+	}
 
 	ptSong = ui.PrepareText("Trippin on a Hole in a Paper Heart")
 	ptAcoustic = ui.PrepareText("acoustic")
@@ -39,6 +43,15 @@ func initVG(width, height int32) {
 	ptVolume = ui.PrepareText("Volume")
 	ptGainStr = ui.PrepareText("0.68")
 	ptVolumeStr = ui.PrepareText("0 dB")
+
+	fxNames = [...]*vgui.PreparedText{
+		ui.PrepareText("pit1"),
+		ui.PrepareText("rtr1"),
+		ui.PrepareText("phr1"),
+		ui.PrepareText("cho1"),
+		ui.PrepareText("dly1"),
+	}
+
 }
 
 const size = 16
@@ -79,16 +92,15 @@ func drawVG(width, height int32) {
 		btnDirty, top := top.SplitV(btnHeight)
 		btnClean, btnAcoustic := top.SplitV(btnHeight)
 
-		if t := ui.Button(btnDirty, true, "dirty"); t != nil {
+		if t := ui.Button(btnDirty, true, ptDirty); t != nil {
 
 		}
-		ui.Button(btnClean, false, "clean")
-		ui.Button(btnAcoustic, false, "acoustic")
+		ui.Button(btnClean, false, ptClean)
+		ui.Button(btnAcoustic, false, ptAcoustic)
 
 		// FX toggles:
 		fxWidth := bottom.W / 5.0
 		mid, bottom := bottom.SplitH(bottom.H - (size + 16))
-		fxNames := [...]string{"pit1", "rtr1", "phr1", "cho1", "dly1"}
 		for i := 0; i < 5; i++ {
 			var btnFX vgui.Window
 			btnFX, bottom = bottom.SplitV(fxWidth)
